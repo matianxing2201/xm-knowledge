@@ -1,10 +1,15 @@
 import { defineConfig } from 'vitepress'
+import { RssPlugin } from 'vitepress-plugin-rss'
 
 export default defineConfig({
   title: '学习笔记',
   description: '个人学习笔记知识库',
   lang: 'zh-CN',
   cleanUrls: true,
+
+  sitemap: {
+    hostname: 'https://your-username.github.io/xm-knowledge',
+  },
 
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
@@ -16,6 +21,19 @@ export default defineConfig({
     options: {
       detailedView: true,
     },
+  },
+
+  vite: {
+    plugins: [
+      RssPlugin({
+        title: '学习笔记',
+        description: '个人学习笔记知识库',
+        baseUrl: 'https://your-username.github.io/xm-knowledge',
+        url: 'https://your-username.github.io/xm-knowledge/feed.xml',
+        filename: 'feed.xml',
+        copyright: '© 2026 学习笔记',
+      }),
+    ],
   },
 
   themeConfig: {
