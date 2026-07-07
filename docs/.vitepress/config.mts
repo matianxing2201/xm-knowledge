@@ -5,6 +5,7 @@ export default defineConfig({
   title: "学习笔记",
   description: "个人学习笔记知识库",
   lang: "zh-CN",
+  base: "/xm-knowledge/",
   cleanUrls: true,
 
   sitemap: {
