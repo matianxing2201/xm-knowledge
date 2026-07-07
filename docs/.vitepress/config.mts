@@ -240,9 +240,11 @@ export default defineConfig({
       "/ai/": [
         {
           text: "Spring AI",
+          link: "/ai/SpringAI/",
           items: [
             {
               text: "Demo",
+              link: "/ai/SpringAI/Demo/",
               items: [
                 {
                   text: "Spring AI + 智谱多模态图片分析",
@@ -258,6 +260,7 @@ export default defineConfig({
         },
         {
           text: "LangChain",
+          link: "/ai/LangChain/",
           items: [],
         },
       ],
