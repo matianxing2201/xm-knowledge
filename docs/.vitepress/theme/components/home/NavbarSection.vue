@@ -23,7 +23,7 @@ const navItems = [
     class="fixed top-0 inset-x-0 z-50 flex items-center px-10 transition-all duration-[var(--motion-hover)]"
     :style="{ height: heightPx + 'px' }"
     :class="isScrolled.get() > 0.5
-      ? 'bg-[rgba(9,9,11,0.75)] backdrop-blur-[20px] border-b border-border/50 shadow-[0_1px_3px_rgba(0,0,0,0.3)]'
+      ? 'bg-[rgba(12,10,9,0.92)] backdrop-blur-[12px] border-b border-border/40 shadow-[0_1px_3px_rgba(0,0,0,0.3)]'
       : 'bg-transparent'"
   >
     <!-- Logo -->
