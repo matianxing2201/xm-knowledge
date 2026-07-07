@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useStatistics } from '../../composables/useStatistics'
-import { motion, useMotionValue, useTransform, useInView } from 'motion-v'
+import { motion, useMotionValue, useTransform, useInView, animate } from 'motion-v'
 
 const stats = useStatistics()
 const sectionRef = ref<HTMLElement | null>(null)
@@ -20,7 +20,7 @@ function useCountUp(target: () => number) {
   return {
     display,
     init() {
-      val.animate(target(), { duration: 1.5, ease: [0.22, 1, 0.36, 1] })
+      animate(val, target(), { duration: 1.5, ease: [0.22, 1, 0.36, 1] })
     },
   }
 }
