@@ -239,18 +239,26 @@ export default defineConfig({
       ],
       "/ai/": [
         {
-          text: "AI",
+          text: "Spring AI",
           items: [
             {
-              text: "Spring AI 智谱图片分析",
-              link: "/ai/spring-ai/spring-ai-zhipu-image-analysis",
+              text: "Demo",
+              items: [
+                {
+                  text: "Spring AI + 智谱多模态图片分析",
+                  link: "/ai/SpringAI/Demo/Spring AI + 智谱多模态图片分析",
+                },
+                {
+                  text: "Spring AI + MiMo TTS 语言生成",
+                  link: "/ai/SpringAI/Demo/Spring AI + MiMo TTS语言生成",
+                },
+              ],
             },
-            { text: "LangChain 概述", link: "/ai/langchain/概述" },
-            { text: "LangChain Agents", link: "/ai/langchain/核心组件/Agents" },
-            { text: "LangChain Models", link: "/ai/langchain/核心组件/Models" },
-            { text: "LangGraph", link: "/ai/lang-graph" },
-            { text: "Deep Agents", link: "/ai/deep-agents" },
           ],
+        },
+        {
+          text: "LangChain",
+          items: [],
         },
       ],
     },
