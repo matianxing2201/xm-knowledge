@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import { useRoute } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
+import { computed } from 'vue'
+import HomePage from './components/home/HomePage.vue'
 import GiscusComments from './components/GiscusComments.vue'
 import PageStats from './components/PageStats.vue'
 
 const { Layout: DefaultLayout } = DefaultTheme
+const route = useRoute()
+
+const isHome = computed(() => {
+  const path = route.path
+  return path === '/' || path === '/xm-knowledge/' || path === '/index.html' || path === '/xm-knowledge/index.html'
+})
 </script>
 
 <template>
-  <DefaultLayout>
+  <HomePage v-if="isHome" />
+  <DefaultLayout v-else>
     <template #doc-after>
       <GiscusComments />
     </template>
