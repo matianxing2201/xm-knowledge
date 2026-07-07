@@ -54,16 +54,16 @@ xm-knowledge/
 
 ## 功能特性
 
-| 功能 | 说明 |
-|------|------|
-| 自定义首页 | 分类卡片导航 + 最近更新文章列表 |
-| 标签系统 | 标签云 + 按标签筛选文章 |
-| 归档页 | 按年月分组展示所有文章 |
-| 本地搜索 | VitePress 内置全文搜索 |
+| 功能        | 说明                                     |
+| ----------- | ---------------------------------------- |
+| 自定义首页  | 分类卡片导航 + 最近更新文章列表          |
+| 标签系统    | 标签云 + 按标签筛选文章                  |
+| 归档页      | 按年月分组展示所有文章                   |
+| 本地搜索    | VitePress 内置全文搜索                   |
 | Giscus 评论 | 每篇文章底部集成 GitHub Discussions 评论 |
-| 阅读量统计 | 不蒜子 (busuanzi) 页面 PV 统计 |
-| RSS 订阅 | 自动生成 feed.xml |
-| 文章检查 | `pnpm check <file.md>` 检查文章规范 |
+| 阅读量统计  | 不蒜子 (busuanzi) 页面 PV 统计           |
+| RSS 订阅    | 自动生成 feed.xml                        |
+| 文章检查    | `pnpm check <file.md>` 检查文章规范      |
 
 ## 快速开始
 
@@ -103,6 +103,7 @@ pnpm check docs/java/your-article.md
 ```
 
 检查规则：
+
 - H1 标题唯一且存在
 - 不允许 H5/H6 级标题（最高 H4）
 - 必须包含 Frontmatter（`title` 必填，`tags` 和 `date` 建议填写）
@@ -112,13 +113,3 @@ pnpm check docs/java/your-article.md
 ## 部署
 
 推送到 `main` 分支后，GitHub Actions 自动构建并部署到 GitHub Pages。
-
-## 自定义配置
-
-修改前需要替换以下占位符：
-
-| 位置 | 原占位符 | 替换为 |
-|------|----------|--------|
-| [config.mts](docs/.vitepress/config.mts) | `your-username` | `matianxing2201`（已完成） |
-| [index.md](docs/index.md) | `your-username` | `matianxing2201`（已完成） |
-| [GiscusComments.vue](docs/.vitepress/theme/components/GiscusComments.vue) | `your-username` | `matianxing2201`（已完成） |

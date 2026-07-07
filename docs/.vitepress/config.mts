@@ -22,7 +22,7 @@ export default defineConfig({
       },
     ],
   ],
-
+  // @ts-ignore - search 类型在 VitePress 1.6 中尚未导出，运行时正常
   search: {
     provider: "local",
     options: {
@@ -35,7 +35,7 @@ export default defineConfig({
       RssPlugin({
         title: "学习笔记",
         description: "个人学习笔记知识库",
-        baseUrl: "https://matianxing2201.github.io/xm-knowledge",
+        baseUrl: "https://matianxing2201.github.io",
         url: "https://matianxing2201.github.io/xm-knowledge/feed.xml",
         filename: "feed.xml",
         copyright: "© 2026 学习笔记",
@@ -46,24 +46,30 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "首页", link: "/" },
-      { text: "Java", link: "/java/" },
-      { text: "Go", link: "/go/" },
-      { text: "AI", link: "/ai/" },
       {
         text: "前端",
         items: [
-          { text: "Vue", link: "/web/vue/" },
-          { text: "React", link: "/web/react/" },
-          { text: "JavaScript", link: "/web/javascript/" },
+          { text: "Vite", link: "/web/vite/" },
+          { text: "Monorepo", link: "/web/monorepo/" },
           { text: "Node.js", link: "/web/node/" },
           { text: "TypeScript", link: "/web/typescript/" },
-          { text: "Vite", link: "/web/vite/" },
+          { text: "React", link: "/web/react/" },
+          { text: "Vue", link: "/web/vue/" },
+          { text: "HTML5", link: "/web/html5/" },
           { text: "网络", link: "/web/network/" },
           { text: "CSS3", link: "/web/css3/" },
-          { text: "HTML5", link: "/web/html5/" },
-          { text: "Monorepo", link: "/web/monorepo/" },
+          { text: "ECMAScript6", link: "/web/ecmascript6/" },
+          { text: "颠覆认知的ES6+", link: "/web/es6-plus/" },
+          { text: "数组扩展方法", link: "/web/javascript/array-methods/" },
+          { text: "DOM", link: "/web/javascript/dom/" },
+          { text: "ECMAScript", link: "/web/ecmascript/" },
+          { text: "CSS/JS基础序言", link: "/web/css-js/" },
+          { text: "基础", link: "/web/base/" },
         ],
       },
+      { text: "Java", link: "/java/" },
+      { text: "AI", link: "/ai/" },
+      { text: "Go", link: "/go/" },
       { text: "标签", link: "/tags.html" },
       { text: "归档", link: "/archive.html" },
     ],
