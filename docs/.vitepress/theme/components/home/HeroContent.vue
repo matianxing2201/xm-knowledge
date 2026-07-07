@@ -18,7 +18,7 @@ import { motion } from 'motion-v'
       :initial="{ opacity: 0, y: 20 }"
       :animate="{ opacity: 1, y: 0 }"
       :transition="{ duration: 0.7, delay: 0.2, ease: [0.22,1,0.36,1] }"
-      class="text-[72px] max-lg:text-[56px] max-md:text-[44px] font-extrabold font-heading bg-gradient-to-r from-primary via-[#9333ea] to-secondary bg-clip-text text-transparent mb-5 leading-[1.05] tracking-tight"
+      class="text-[72px] max-lg:text-[56px] max-md:text-[44px] font-extrabold font-heading bg-gradient-to-r from-primary via-[#F59E0B] to-secondary bg-clip-text text-transparent mb-5 leading-[1.05] tracking-tight"
     >
       XM Knowledge
     </motion.h1>
@@ -47,7 +47,7 @@ import { motion } from 'motion-v'
       :transition="{ duration: 0.6, delay: 0.5, ease: [0.22,1,0.36,1] }"
       class="flex gap-4"
     >
-      <a href="/java/" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-primary text-white text-[16px] font-semibold hover:scale-[1.02] hover:shadow-[0_6px_20px_rgba(124,58,237,0.4)] transition-all duration-[var(--motion-hover)]">
+      <a href="/java/" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-primary text-white text-[16px] font-semibold hover:scale-[1.02] hover:shadow-[0_6px_20px_rgba(217,119,6,0.35)] transition-all duration-[var(--motion-hover)]">
         Start Reading
         <svg viewBox="0 0 20 20" class="w-4 h-4" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"/></svg>
       </a>

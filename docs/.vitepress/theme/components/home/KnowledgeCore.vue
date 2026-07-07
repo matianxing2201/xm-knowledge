@@ -15,19 +15,16 @@ function onMouseMove(e: MouseEvent) {
   mouseY.set((e.clientY - rect.top) / rect.height)
 }
 
-// Diamond layout: AI(top), Java(left-center), Web(right-center), Go(bottom), ●(center)
-const CX = 210
-const CY = 210
+const PRIMARY = '#D97706'
 
 const nodes = [
   { label: 'AI',    desc: 'LLM · Agent',         x: 210, y: 50,  color: '#10a37f', link: '/ai/' },
   { label: 'Java',  desc: 'Spring · JVM',         x: 60,  y: 185, color: '#f89820', link: '/java/' },
-  { label: '●',     desc: 'NOW',                  x: 210, y: 185, color: '#7C3AED', link: '/' },
+  { label: '●',     desc: 'NOW',                  x: 210, y: 185, color: PRIMARY,    link: '/' },
   { label: 'Web',   desc: 'Vue · React',          x: 360, y: 185, color: '#3b82f6', link: '/web/' },
   { label: 'Go',    desc: 'Goroutine · Web',      x: 210, y: 320, color: '#00ADD8', link: '/go/' },
 ]
 
-// Connection lines (indices: 0→1, 0→3, 1→4, 3→4, center to all)
 const lines = [
   { x1: 210, y1: 80,  x2: 90,  y2: 155 },
   { x1: 210, y1: 80,  x2: 330, y2: 155 },
@@ -39,14 +36,14 @@ const lines = [
   { x1: 210, y1: 205, x2: 210, y2: 310 },
 ]
 
-// Particle system
+// Warm-toned particle system
 const particles: { x: number; y: number; r: number; a: number; vx: number; vy: number }[] = []
 for (let i = 0; i < 20; i++) {
   particles.push({
     x: Math.random() * 420,
     y: Math.random() * 420,
     r: Math.random() * 1.2 + 0.3,
-    a: Math.random() * 0.3 + 0.05,
+    a: Math.random() * 0.25 + 0.04,
     vx: (Math.random() - 0.5) * 0.15,
     vy: (Math.random() - 0.5) * 0.15,
   })
@@ -61,7 +58,9 @@ onMounted(() => {
       if (p.x < 0 || p.x > 420) p.vx *= -1
       if (p.y < 0 || p.y > 420) p.vy *= -1
     }
-    particleSvg.value = particles.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.r}" fill="#7C3AED" opacity="${p.a}"/>`).join('')
+    particleSvg.value = particles.map(p =>
+      `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.r}" fill="#D97706" opacity="${p.a}"/>`
+    ).join('')
     requestAnimationFrame(tick)
   }
   tick()
@@ -91,23 +90,22 @@ const hovered = ref<string | null>(null)
         <!-- Connection lines -->
         <line v-for="(ln, i) in lines" :key="'l'+i"
               :x1="ln.x1" :y1="ln.y1" :x2="ln.x2" :y2="ln.y2"
-              stroke="rgba(124,58,237,0.12)" stroke-width="1" />
-        <!-- Dashed accent lines to center -->
-        <line x1="90"  y1="185" x2="210" y2="185" stroke="rgba(124,58,237,0.06)" stroke-width="0.5" stroke-dasharray="4 4" />
-        <line x1="330" y1="185" x2="210" y2="185" stroke="rgba(124,58,237,0.06)" stroke-width="0.5" stroke-dasharray="4 4" />
-        <line x1="210" y1="60"  x2="210" y2="185" stroke="rgba(124,58,237,0.06)" stroke-width="0.5" stroke-dasharray="4 4" />
-        <line x1="210" y1="310" x2="210" y2="185" stroke="rgba(124,58,237,0.06)" stroke-width="0.5" stroke-dasharray="4 4" />
+              stroke="rgba(217,119,6,0.10)" stroke-width="1" />
+        <line x1="90"  y1="185" x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
+        <line x1="330" y1="185" x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
+        <line x1="210" y1="60"  x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
+        <line x1="210" y1="310" x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
 
-        <!-- Glowing ring around center -->
-        <circle cx="210" cy="185" r="28" fill="none" stroke="rgba(124,58,237,0.08)" stroke-width="1" />
-        <circle cx="210" cy="185" r="14" fill="none" stroke="rgba(124,58,237,0.15)" stroke-width="0.5" />
+        <!-- Rings around center -->
+        <circle cx="210" cy="185" r="28" fill="none" stroke="rgba(217,119,6,0.08)" stroke-width="1" />
+        <circle cx="210" cy="185" r="14" fill="none" stroke="rgba(217,119,6,0.15)" stroke-width="0.5" />
 
-        <!-- Center dot -->
-        <circle cx="210" cy="185" r="6" fill="#7C3AED">
+        <!-- Center dot — warm amber pulse -->
+        <circle cx="210" cy="185" r="6" fill="#D97706">
           <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
           <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite" />
         </circle>
-        <circle cx="210" cy="185" r="10" fill="none" stroke="rgba(124,58,237,0.2)" stroke-width="0.5">
+        <circle cx="210" cy="185" r="10" fill="none" stroke="rgba(217,119,6,0.25)" stroke-width="0.5">
           <animate attributeName="r" values="12;18;12" dur="2s" repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite" />
         </circle>
@@ -116,27 +114,23 @@ const hovered = ref<string | null>(null)
         <g v-for="(n, i) in nodes.filter(n => n.label !== '●')" :key="n.label"
            :href="n.link" class="cursor-pointer"
            @mouseenter="hovered = n.label" @mouseleave="hovered = null">
-          <!-- Node background circle -->
-          <circle :cx="n.x" :cy="n.y" r="32" :fill="n.color + '10'"
-                  :stroke="hovered === n.label ? n.color : 'rgba(255,255,255,0.08)'"
+          <circle :cx="n.x" :cy="n.y" r="32" :fill="n.color + '12'"
+                  :stroke="hovered === n.label ? n.color : 'rgba(255,247,237,0.06)'"
                   :stroke-width="hovered === n.label ? 1.5 : 0.5"
                   :filter="hovered === n.label ? 'url(#glow-'+n.label+')' : ''"
                   class="transition-all" style="transition: all 0.18s ease" />
-          <!-- Label -->
           <text :x="n.x" :y="n.y + 1" text-anchor="middle" dominant-baseline="middle"
-                :fill="hovered === n.label ? n.color : '#fafafa'"
+                :fill="hovered === n.label ? n.color : '#fafaf9'"
                 font-size="14" font-weight="700" style="transition: fill 0.18s ease">
             {{ n.label }}
           </text>
-          <!-- Desc below -->
-          <text :x="n.x" :y="n.y + 48" text-anchor="middle" fill="#a1a1aa" font-size="10">
+          <text :x="n.x" :y="n.y + 48" text-anchor="middle" fill="#a8a29e" font-size="10">
             {{ n.desc }}
           </text>
-          <!-- Glow filter defs -->
           <defs>
             <filter :id="'glow-'+n.label" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur :stdDeviation="4" result="blur" />
-              <feFlood :flood-color="n.color" flood-opacity="0.3" />
+              <feFlood :flood-color="n.color" flood-opacity="0.25" />
               <feComposite in2="blur" operator="in" />
               <feMerge>
                 <feMergeNode />

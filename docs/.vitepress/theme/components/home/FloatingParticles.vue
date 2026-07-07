@@ -36,7 +36,7 @@ onMounted(() => {
 
       ctx.beginPath()
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(124, 58, 237, ${p.alpha})`
+      ctx.fillStyle = `rgba(217, 119, 6, ${p.alpha})`
       ctx.fill()
     }
 

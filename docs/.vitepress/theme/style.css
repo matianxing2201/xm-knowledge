@@ -6,18 +6,18 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Colors — dark (default) */
-  --color-bg: #09090B;
-  --color-surface: #111827;
-  --color-card: #18181B;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-primary: #7C3AED;
-  --color-secondary: #22D3EE;
-  --color-text: #FAFAFA;
-  --color-text-secondary: #A1A1AA;
-  --color-success: #22C55E;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
+  /* Colors — warm dark (default) */
+  --color-bg: #0C0A09;
+  --color-surface: #1C1917;
+  --color-card: #292524;
+  --color-border: rgba(255, 247, 237, 0.07);
+  --color-primary: #D97706;
+  --color-secondary: #14B8A6;
+  --color-text: #FAFAF9;
+  --color-text-secondary: #A8A29E;
+  --color-success: #65A30D;
+  --color-warning: #EA580C;
+  --color-danger: #DC2626;
 
   /* Typography */
   --font-heading: 'Geist', 'Noto Sans SC', system-ui, sans-serif;
@@ -29,10 +29,10 @@
   --radius-card: 14px;
 
   /* Shadows */
-  --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.08);
-  --shadow-card-dark: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.12);
+  --shadow-card-dark: 0 4px 24px rgba(0, 0, 0, 0.5);
   --shadow-modal: 0 24px 60px -12px rgba(0, 0, 0, 0.5);
-  --shadow-popover: 0 8px 30px -4px rgba(0, 0, 0, 0.35);
+  --shadow-popover: 0 8px 30px -4px rgba(0, 0, 0, 0.4);
 
   /* Motion */
   --motion-hover: 180ms;
@@ -44,10 +44,10 @@
 
 /* Light theme overrides — VitePress toggles .dark/.light on <html> */
 :where(.light, .light *) {
-  --color-bg: #FFFFFF;
-  --color-surface: #F9FAFB;
+  --color-bg: #FEFCF4;
+  --color-surface: #F5F1EB;
   --color-card: #FFFFFF;
-  --color-border: rgba(17, 17, 17, 0.08);
-  --color-text: #18181B;
-  --color-text-secondary: #71717A;
+  --color-border: rgba(28, 25, 23, 0.08);
+  --color-text: #1C1917;
+  --color-text-secondary: #78716C;
 }

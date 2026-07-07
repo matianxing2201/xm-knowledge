@@ -4,13 +4,13 @@ import FloatingParticles from './FloatingParticles.vue'
 
 <template>
   <div class="fixed inset-0 pointer-events-none z-[-1] will-change-transform">
-    <!-- Mesh gradient -->
+    <!-- Mesh gradient — warm amber glow -->
     <div
       class="absolute inset-0"
       style="background:
-        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(124,58,237,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(34,211,238,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 50% 80%, rgba(34,197,94,0.05) 0%, transparent 50%);
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(217,119,6,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(245,158,11,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 80%, rgba(168,162,158,0.04) 0%, transparent 50%);
       "
     />
     <!-- SVG noise overlay -->
