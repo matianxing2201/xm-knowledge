@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { motion } from 'motion-v'
 
+const MotionDiv = motion.div
+
 const learningNow = ['MCP', 'Agent', 'LangGraph']
 </script>
 
 <template>
   <footer class="border-t border-border">
     <div class="max-w-[1200px] mx-auto px-[120px] py-16 max-lg:px-12 max-sm:px-6">
-      <motion.div
+      <MotionDiv
         :initial="{ opacity: 0 }"
         :whileInView="{ opacity: 1 }"
         :viewport="{ once: true }"
@@ -41,7 +43,7 @@ const learningNow = ['MCP', 'Agent', 'LangGraph']
             Build continuously. Learn continuously.
           </p>
         </div>
-      </motion.div>
+      </MotionDiv>
     </div>
   </footer>
 </template>

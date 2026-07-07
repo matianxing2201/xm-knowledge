@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue'
 import { useStatistics } from '../../composables/useStatistics'
 import { motion, animate } from 'motion-v'
 
+const MotionDiv = motion.div
+
 const stats = useStatistics()
 const triggered = ref(false)
 
@@ -67,7 +69,7 @@ onMounted(() => {
 
 <template>
   <section ref="sectionRef" class="max-w-[1200px] mx-auto px-[120px] py-[120px] max-lg:px-12 max-lg:py-[80px] max-sm:px-6 max-sm:py-[80px]">
-    <motion.div
+    <MotionDiv
       :initial="{ opacity: 0, y: 24 }"
       :whileInView="{ opacity: 1, y: 0 }"
       :viewport="{ once: true }"
@@ -76,10 +78,10 @@ onMounted(() => {
     >
       <h2 class="text-[40px] font-heading font-bold text-text max-sm:text-[28px]">Statistics</h2>
       <p class="text-[18px] text-text-secondary mt-2">A snapshot of this knowledge base.</p>
-    </motion.div>
+    </MotionDiv>
 
     <div class="grid grid-cols-3 gap-6 max-sm:grid-cols-2">
-      <motion.div
+      <MotionDiv
         v-for="(item, i) in statData"
         :key="item.label"
         :initial="{ opacity: 0, y: 24 }"
@@ -92,7 +94,7 @@ onMounted(() => {
           {{ displayValue(item) }}
         </span>
         <span class="text-sm text-text-secondary uppercase tracking-wider">{{ item.label }}</span>
-      </motion.div>
+      </MotionDiv>
     </div>
   </section>
 </template>

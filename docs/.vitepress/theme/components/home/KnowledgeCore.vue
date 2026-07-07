@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { motion, useMotionValue, useSpring, useTransform } from 'motion-v'
 
+const MotionDiv = motion.div
+
 const container = ref<HTMLElement | null>(null)
 const mouseX = useMotionValue(0.5)
 const mouseY = useMotionValue(0.5)
@@ -70,14 +72,14 @@ const hovered = ref<string | null>(null)
 </script>
 
 <template>
-  <motion.div
+  <MotionDiv
     ref="container"
     class="relative w-[420px] h-[420px] hidden lg:block select-none"
     :style="{ perspective: '800px', transformStyle: 'preserve-3d' }"
     @mousemove="onMouseMove"
     @mouseleave="hovered = null"
   >
-    <motion.div
+    <MotionDiv
       class="w-full h-full"
       :style="{ rotateX: rotateX + 'deg', rotateY: rotateY + 'deg', transformStyle: 'preserve-3d' }"
       :animate="{ y: [-6, 6, -6] }"
@@ -140,6 +142,6 @@ const hovered = ref<string | null>(null)
           </defs>
         </g>
       </svg>
-    </motion.div>
-  </motion.div>
+    </MotionDiv>
+  </MotionDiv>
 </template>

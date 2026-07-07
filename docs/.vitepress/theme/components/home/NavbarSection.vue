@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useScroll, useMotionValue, useTransform, useSpring } from 'motion-v'
+import { useScroll, useMotionValue, useTransform, useSpring, motion } from 'motion-v'
+
+const MotionNav = motion.nav
 
 const mobileOpen = ref(false)
 
@@ -19,7 +21,7 @@ const navItems = [
 </script>
 
 <template>
-  <motion.nav class="fixed top-0 inset-x-0 z-50 flex items-center px-10 transition-all duration-[var(--motion-hover)]"
+  <MotionNav class="fixed top-0 inset-x-0 z-50 flex items-center px-10 transition-all duration-[var(--motion-hover)]"
     :style="{ height: heightPx + 'px' }" :class="isScrolled.get() > 0.5
       ? 'bg-[rgba(12,10,9,0.92)] backdrop-blur-[12px] border-b border-border/40 shadow-[0_1px_3px_rgba(0,0,0,0.3)]'
       : 'bg-transparent'">
@@ -60,7 +62,7 @@ const navItems = [
         </svg>
       </button>
     </div>
-  </motion.nav>
+  </MotionNav>
 
   <!-- Mobile menu -->
   <div v-if="mobileOpen"
