@@ -71,7 +71,13 @@ export default defineConfig({
         ],
       },
       { text: "Java", link: "/java/" },
-      { text: "AI", link: "/ai/" },
+      {
+        text: "AI",
+        items: [
+          { text: "Spring AI", link: "/ai/SpringAI/" },
+          { text: "LangChain", link: "/ai/LangChain/" },
+        ],
+      },
       { text: "Go", link: "/go/" },
       { text: "标签", link: "/tags.html" },
       { text: "归档", link: "/archive.html" },
