@@ -28,7 +28,7 @@ const navItems = [
   >
     <!-- Logo -->
     <a href="/" class="flex items-center gap-2.5 shrink-0 mr-10">
-      <div class="w-9 h-9 rounded-[10px] bg-gradient-to-br from-primary to-[#F59E0B] flex items-center justify-center text-white font-extrabold text-xs tracking-wider shadow-[0_2px_8px_rgba(217,119,6,0.35)]">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-[#F59E0B] flex items-center justify-center text-white font-bold text-[10px] tracking-wider shadow-[0_2px_6px_rgba(217,119,6,0.3)]">
         XM
       </div>
       <span class="text-[15px] font-bold text-text hidden sm:block tracking-tight">XM Knowledge</span>
