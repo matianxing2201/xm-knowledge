@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: 学习笔记
+  name: XM的学习笔记
   text: 个人知识库
   tagline: Java · Go · AI · 前端
   actions:
@@ -11,5 +11,5 @@ hero:
       link: /java/
     - theme: alt
       text: GitHub
-      link: https://github.com/your-username/xm-knowledge
+      link: https://github.com/matianxing2201/xm-knowledge
 ---

@@ -17,7 +17,7 @@ watch(
       :key="key"
       :is="'script'"
       src="https://giscus.app/client.js"
-      data-repo="your-username/xm-knowledge"
+      data-repo="matianxing2201/xm-knowledge"
       data-repo-id=""
       data-category="Announcements"
       data-category-id=""
