@@ -29,8 +29,9 @@ const domains = useDomains()
         :whileInView="{ opacity: 1, y: 0 }"
         :viewport="{ once: true }"
         :transition="{ duration: 0.3, delay: i * 0.06, ease: [0.22,1,0.36,1] }"
+        class="h-full"
       >
-        <DomainCard :domain="domain" />
+        <DomainCard :domain="domain" class="h-full" />
       </MotionDiv>
     </div>
   </section>

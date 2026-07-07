@@ -47,7 +47,16 @@ function initStats() {
 
 function displayValue(item: typeof statData.value[0]): string {
   if (item.label === 'Reading Time') return formatReadingTime(stats.value.readingTime)
-  if (item.label === 'Last Update') return stats.value.lastUpdate || 'N/A'
+  if (item.label === 'Last Update') {
+    const raw = stats.value.lastUpdate
+    if (!raw || raw === 'N/A') return 'N/A'
+    const d = new Date(raw)
+    if (isNaN(d.getTime())) return raw
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    return `${y}-${m}-${day}`
+  }
   if (item.isNumber) return item.display.toLocaleString()
   return String(item.display)
 }
