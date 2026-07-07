@@ -1,5 +1,6 @@
 import { defineConfig } from "vitepress";
 import { RssPlugin } from "vitepress-plugin-rss";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   title: "学习笔记",
@@ -7,6 +8,7 @@ export default defineConfig({
   lang: "zh-CN",
   base: "/xm-knowledge/",
   cleanUrls: true,
+  srcExclude: ["**/superpowers/**", "**/spec/**"],
 
   sitemap: {
     hostname: "https://matianxing2201.github.io/xm-knowledge",
@@ -32,6 +34,7 @@ export default defineConfig({
 
   vite: {
     plugins: [
+      tailwindcss(),
       RssPlugin({
         title: "学习笔记",
         description: "个人学习笔记知识库",
