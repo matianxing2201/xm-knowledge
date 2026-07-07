@@ -13,7 +13,7 @@ const heightPx = useSpring(navHeight, { stiffness: 200, damping: 25 })
 
 const navItems = [
   { label: 'Home', href: '/xm-knowledge/' },
-  { label: 'AI', href: '/xm-knowledge/ai/' },
+  { label: 'AI', href: '/xm-knowledge/ai/SpringAI/' },
   { label: 'Java', href: '/xm-knowledge/java/' },
   { label: 'Go', href: '/xm-knowledge/go/' },
   { label: 'Web', href: '/xm-knowledge/web/' },
