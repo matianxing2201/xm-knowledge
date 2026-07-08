@@ -26,6 +26,9 @@ importers:
       tailwindcss:
         specifier: ^4.3.2
         version: 4.3.2
+      vitepress-component-medium-zoom:
+        specifier: ^1.1.1
+        version: 1.1.1
     devDependencies:
       vitepress:
         specifier: ^1.6.4
@@ -1116,6 +1119,9 @@ packages:
   mdast-util-to-hast@13.2.1:
     resolution: {integrity: sha512-cctsq2wp5vTsLIcaymblUriiTcZd0CwWtCbLvrOzYCDZoWyMNV8sZ7krj09FSnsiJi3WVsHLM4k6Dq/yaPyCXA==}
 
+  medium-zoom@1.1.0:
+    resolution: {integrity: sha512-ewyDsp7k4InCUp3jRmwHBRFGyjBimKps/AJLjRSox+2q/2H4p/PNpQf+pwONWlJiOudkBXtbdmVbFjqyybfTmQ==}
+
   micromark-util-character@2.1.1:
     resolution: {integrity: sha512-wv8tdUTJ3thSFFFJKtpYKOYiGP2+v96Hvk4Tu8KpCAsTMs6yi+nVmGh1syvSCsaxz45J6Jbw+9DD6g97+NV67Q==}
 
@@ -1317,6 +1323,9 @@ packages:
         optional: true
       terser:
         optional: true
+
+  vitepress-component-medium-zoom@1.1.1:
+    resolution: {integrity: sha512-kqddM27Werz6qLBYKWpjtE39A+qOWZBJarLmBjLCDy/xhpAb1XCqwtLwvpQloiqI/VhVHqMXSVpXLnrQcEAaQw==}
 
   vitepress-plugin-folder-tree@1.2.1:
     resolution: {integrity: sha512-DP009qCKVH3X2BVYbyK9lfwrb9fai7cIKzUwUIat7rE2/M3C3DTkmgsyK3UF8wReSIWdVdHFHFNQAcjwBV3pNw==}
@@ -2282,6 +2291,8 @@ snapshots:
       unist-util-visit: 5.1.0
       vfile: 6.0.3
 
+  medium-zoom@1.1.0: {}
+
   micromark-util-character@2.1.1:
     dependencies:
       micromark-util-symbol: 2.0.1
@@ -2518,6 +2529,10 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
       lightningcss: 1.32.0
+
+  vitepress-component-medium-zoom@1.1.1:
+    dependencies:
+      medium-zoom: 1.1.0
 
   vitepress-plugin-folder-tree@1.2.1(vitepress@1.6.4(@algolia/client-search@5.55.1)(lightningcss@1.32.0)(postcss@8.5.16)(search-insights@2.17.3)):
     dependencies:

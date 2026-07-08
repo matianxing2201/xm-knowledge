@@ -2,6 +2,7 @@ import { defineConfig } from "vitepress";
 import { withFolderTree } from "vitepress-plugin-folder-tree";
 import { RssPlugin } from "vitepress-plugin-rss";
 import tailwindcss from "@tailwindcss/vite";
+import { enrichTreeDates } from "./plugins/enrich-tree-dates";
 
 export default withFolderTree(
   defineConfig({
@@ -36,6 +37,7 @@ export default withFolderTree(
 
     vite: {
       plugins: [
+        enrichTreeDates(),
         tailwindcss(),
         RssPlugin({
           title: "学习笔记",
@@ -46,6 +48,18 @@ export default withFolderTree(
           copyright: "© 2026 学习笔记",
         }),
       ],
+      ssr: {
+        noExternal: ["vitepress-component-medium-zoom"],
+      },
+      assetsInclude: ["**/*.png"],
+    },
+
+    markdown: {
+      theme: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+      lineNumbers: true,
     },
 
     themeConfig: {
@@ -65,8 +79,8 @@ export default withFolderTree(
             { text: "CSS3", link: "/web/css3/" },
             { text: "ECMAScript6", link: "/web/ecmascript6/" },
             { text: "颠覆认知的ES6+", link: "/web/es6-plus/" },
-            { text: "数组扩展方法", link: "/web/javascript/array-methods/" },
-            { text: "DOM", link: "/web/javascript/dom/" },
+            { text: "数组扩展方法", link: "/web/array-methods/" },
+            { text: "DOM", link: "/web/dom/" },
             { text: "ECMAScript", link: "/web/ecmascript/" },
             { text: "CSS/JS基础序言", link: "/web/css-js/" },
             { text: "基础", link: "/web/base/" },

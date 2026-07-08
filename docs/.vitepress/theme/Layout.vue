@@ -5,6 +5,8 @@ import { computed } from 'vue'
 import HomePage from './components/home/HomePage.vue'
 import GiscusComments from './components/GiscusComments.vue'
 import PageStats from './components/PageStats.vue'
+import { MediumZoom } from 'vitepress-component-medium-zoom'
+import 'vitepress-component-medium-zoom/style.css'
 
 const { Layout: DefaultLayout } = DefaultTheme
 const route = useRoute()
@@ -25,4 +27,5 @@ const isHome = computed(() => {
       <PageStats />
     </template>
   </DefaultLayout>
+  <MediumZoom selector=".vp-doc img" :options="{ background: 'rgba(0,0,0,0.8)' }" />
 </template>
