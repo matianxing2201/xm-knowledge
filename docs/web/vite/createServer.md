@@ -1,5 +1,10 @@
 ---
 title: createServer
+date: 2026-07-08
+tags:
+  - Vite
+  - DevServer
+  - 源码
 ---
 
 # createServer

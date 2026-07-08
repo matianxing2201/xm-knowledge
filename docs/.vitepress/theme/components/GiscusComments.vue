@@ -13,24 +13,10 @@ watch(
 
 <template>
   <div class="giscus-wrapper">
-    <component
-      :key="key"
-      :is="'script'"
-      src="https://giscus.app/client.js"
-      data-repo="matianxing2201/xm-knowledge"
-      data-repo-id=""
-      data-category="Announcements"
-      data-category-id=""
-      data-mapping="pathname"
-      data-strict="0"
-      data-reactions-enabled="1"
-      data-emit-metadata="0"
-      data-input-position="top"
-      data-theme="light"
-      data-lang="zh-CN"
-      crossorigin="anonymous"
-      async
-    />
+    <component :key="key" :is="'script'" src="https://giscus.app/client.js" data-repo="matianxing2201/xm-knowledge"
+      data-repo-id="R_kgDOTPFP2w" data-category="Announcements" data-category-id="DIC_kwDOTPFP284DAvab"
+      data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0"
+      data-input-position="top" data-theme="light" data-lang="zh-CN" crossorigin="anonymous" async />
   </div>
 </template>
 
