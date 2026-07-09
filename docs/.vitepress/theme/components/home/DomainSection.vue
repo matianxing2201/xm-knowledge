@@ -1,38 +1,55 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useDomains } from '../../composables/useDomains'
 import DomainCard from './DomainCard.vue'
-import { motion } from 'motion-v'
-
-const MotionDiv = motion.div
 
 const domains = useDomains()
+
+const sortedDomains = computed(() => {
+  const arr = [...domains.value]
+  arr.sort((a, b) => b.articleCount - a.articleCount)
+  return arr
+})
 </script>
 
 <template>
-  <section class="max-w-[1200px] mx-auto px-[120px] py-[120px] max-lg:px-12 max-lg:py-[80px] max-sm:px-6 max-sm:py-[80px]">
-    <MotionDiv
-      :initial="{ opacity: 0, y: 24 }"
-      :whileInView="{ opacity: 1, y: 0 }"
-      :viewport="{ once: true }"
-      :transition="{ duration: 0.5, ease: [0.22,1,0.36,1] }"
-      class="mb-12"
-    >
-      <h2 class="text-[40px] font-heading font-bold text-text max-sm:text-[28px]">Explore Knowledge</h2>
-      <p class="text-[18px] text-text-secondary mt-2">Choose a domain.</p>
-    </MotionDiv>
+  <section class="max-w-[var(--content-max)] mx-auto px-[var(--gutter-desktop)] py-[var(--section-space)] max-lg:px-[var(--gutter-tablet)] max-sm:px-[var(--gutter-mobile)]">
+    <h2 class="text-[36px] font-heading font-bold text-text max-sm:text-[28px] tracking-[-0.01em] mb-8">Explore Knowledge</h2>
 
-    <div class="grid grid-cols-2 gap-6 max-sm:grid-cols-1">
-      <MotionDiv
-        v-for="(domain, i) in domains"
-        :key="domain.name"
-        :initial="{ opacity: 0, y: 24 }"
-        :whileInView="{ opacity: 1, y: 0 }"
-        :viewport="{ once: true }"
-        :transition="{ duration: 0.3, delay: i * 0.06, ease: [0.22,1,0.36,1] }"
-        class="h-full"
-      >
-        <DomainCard :domain="domain" class="h-full" />
-      </MotionDiv>
+    <div class="domain-grid hidden md:grid">
+      <div class="domain-java">
+        <DomainCard :domain="sortedDomains[0]" :large="true" />
+      </div>
+      <div class="domain-web">
+        <DomainCard :domain="sortedDomains[1]" />
+      </div>
+      <div class="domain-go">
+        <DomainCard :domain="sortedDomains[2]" />
+      </div>
+      <div class="domain-ai">
+        <DomainCard :domain="sortedDomains[3]" :large="true" />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-4 md:hidden">
+      <DomainCard v-for="domain in sortedDomains" :key="domain.name" :domain="domain" />
     </div>
   </section>
 </template>
+
+<style scoped>
+.domain-grid {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 1fr auto;
+  grid-template-areas:
+    "java web web"
+    "java go go"
+    "ai ai ai";
+  gap: 24px;
+}
+
+.domain-java { grid-area: java; }
+.domain-web { grid-area: web; }
+.domain-go { grid-area: go; }
+.domain-ai { grid-area: ai; }
+</style>

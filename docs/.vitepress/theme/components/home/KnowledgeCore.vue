@@ -1,147 +1,103 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { motion, useMotionValue, useSpring, useTransform } from 'motion-v'
+import { ref } from 'vue'
+import { motion } from 'motion-v'
+import { withBase } from 'vitepress'
 
 const MotionDiv = motion.div
 
-const container = ref<HTMLElement | null>(null)
-const mouseX = useMotionValue(0.5)
-const mouseY = useMotionValue(0.5)
-const rotateX = useSpring(useTransform(mouseY, [0, 1], [8, -8]), { stiffness: 100, damping: 20 })
-const rotateY = useSpring(useTransform(mouseX, [0, 1], [-8, 8]), { stiffness: 100, damping: 20 })
-
-function onMouseMove(e: MouseEvent) {
-  if (!container.value) return
-  const rect = container.value.getBoundingClientRect()
-  mouseX.set((e.clientX - rect.left) / rect.width)
-  mouseY.set((e.clientY - rect.top) / rect.height)
+interface GraphNode {
+  id: string
+  label: string
+  x: number
+  y: number
+  color: string
+  link: string
 }
 
-const PRIMARY = '#D97706'
-
-const nodes = [
-  { label: 'AI',    desc: 'LLM · Agent',         x: 210, y: 50,  color: '#10a37f', link: '/ai/' },
-  { label: 'Java',  desc: 'Spring · JVM',         x: 60,  y: 185, color: '#f89820', link: '/java/' },
-  { label: '●',     desc: 'NOW',                  x: 210, y: 185, color: PRIMARY,    link: '/' },
-  { label: 'Web',   desc: 'Vue · React',          x: 360, y: 185, color: '#3b82f6', link: '/web/' },
-  { label: 'Go',    desc: 'Goroutine · Web',      x: 210, y: 320, color: '#00ADD8', link: '/go/' },
+const nodes: GraphNode[] = [
+  { id: 'ai', label: 'AI', x: 200, y: 60, color: 'var(--color-ai)', link: '/ai/' },
+  { id: 'java', label: 'Java', x: 60, y: 200, color: 'var(--color-java)', link: '/java/' },
+  { id: 'center', label: 'NOW', x: 200, y: 200, color: 'var(--color-primary)', link: '/' },
+  { id: 'web', label: 'Web', x: 340, y: 200, color: 'var(--color-web)', link: '/web/' },
+  { id: 'go', label: 'Go', x: 200, y: 340, color: 'var(--color-go)', link: '/go/' },
 ]
-
-const lines = [
-  { x1: 210, y1: 80,  x2: 90,  y2: 155 },
-  { x1: 210, y1: 80,  x2: 330, y2: 155 },
-  { x1: 90,  y1: 215, x2: 210, y2: 290 },
-  { x1: 330, y1: 215, x2: 210, y2: 290 },
-  { x1: 190, y1: 185, x2: 80,  y2: 185 },
-  { x1: 230, y1: 185, x2: 340, y2: 185 },
-  { x1: 210, y1: 165, x2: 210, y2: 60  },
-  { x1: 210, y1: 205, x2: 210, y2: 310 },
-]
-
-// Warm-toned particle system
-const particles: { x: number; y: number; r: number; a: number; vx: number; vy: number }[] = []
-for (let i = 0; i < 20; i++) {
-  particles.push({
-    x: Math.random() * 420,
-    y: Math.random() * 420,
-    r: Math.random() * 1.2 + 0.3,
-    a: Math.random() * 0.25 + 0.04,
-    vx: (Math.random() - 0.5) * 0.15,
-    vy: (Math.random() - 0.5) * 0.15,
-  })
-}
-
-const particleSvg = ref('')
-onMounted(() => {
-  function tick() {
-    for (const p of particles) {
-      p.x += p.vx
-      p.y += p.vy
-      if (p.x < 0 || p.x > 420) p.vx *= -1
-      if (p.y < 0 || p.y > 420) p.vy *= -1
-    }
-    particleSvg.value = particles.map(p =>
-      `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.r}" fill="#D97706" opacity="${p.a}"/>`
-    ).join('')
-    requestAnimationFrame(tick)
-  }
-  tick()
-})
 
 const hovered = ref<string | null>(null)
 </script>
 
 <template>
   <MotionDiv
-    ref="container"
-    class="relative w-[420px] h-[420px] hidden lg:block select-none"
-    :style="{ perspective: '800px', transformStyle: 'preserve-3d' }"
-    @mousemove="onMouseMove"
-    @mouseleave="hovered = null"
+    class="relative w-[400px] h-[400px] select-none shrink-0"
+    :initial="{ opacity: 0, scale: 0.96 }"
+    :animate="{ opacity: 1, scale: 1 }"
+    :transition="{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }"
   >
-    <MotionDiv
-      class="w-full h-full"
-      :style="{ rotateX: rotateX + 'deg', rotateY: rotateY + 'deg', transformStyle: 'preserve-3d' }"
-      :animate="{ y: [-6, 6, -6] }"
-      :transition="{ duration: 6, repeat: Infinity, ease: 'easeInOut' }"
-    >
-      <svg class="absolute inset-0 w-full h-full" viewBox="0 0 420 420">
-        <!-- Ambient particles -->
-        <g v-html="particleSvg" />
+    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
+      <!-- Orbit ring -->
+      <circle
+        cx="200" cy="200" r="110"
+        fill="none"
+        stroke="var(--color-border)"
+        stroke-width="1"
+      />
 
-        <!-- Connection lines -->
-        <line v-for="(ln, i) in lines" :key="'l'+i"
-              :x1="ln.x1" :y1="ln.y1" :x2="ln.x2" :y2="ln.y2"
-              stroke="rgba(217,119,6,0.10)" stroke-width="1" />
-        <line x1="90"  y1="185" x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
-        <line x1="330" y1="185" x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
-        <line x1="210" y1="60"  x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
-        <line x1="210" y1="310" x2="210" y2="185" stroke="rgba(217,119,6,0.05)" stroke-width="0.5" stroke-dasharray="4 4" />
+      <!-- Connecting lines -->
+      <g stroke="var(--color-border)" stroke-width="1.5" stroke-linecap="round">
+        <line
+          v-for="n in nodes.filter(n => n.id !== 'center')"
+          :key="`edge-${n.id}`"
+          x1="200" y1="200"
+          :x2="n.x" :y2="n.y"
+          :stroke-opacity="hovered && (hovered === n.id || hovered === 'center') ? 0.6 : 0.35"
+        />
+      </g>
 
-        <!-- Rings around center -->
-        <circle cx="210" cy="185" r="28" fill="none" stroke="rgba(217,119,6,0.08)" stroke-width="1" />
-        <circle cx="210" cy="185" r="14" fill="none" stroke="rgba(217,119,6,0.15)" stroke-width="0.5" />
+      <!-- Nodes -->
+      <g v-for="node in nodes" :key="node.id">
+        <a
+          :href="withBase(node.link)"
+          class="cursor-pointer"
+          @mouseenter="hovered = node.id"
+          @mouseleave="hovered = null"
+        >
+          <!-- Hover glow -->
+          <circle
+            :cx="node.x" :cy="node.y" :r="node.id === 'center' ? 24 : 30"
+            :fill="node.color"
+            :fill-opacity="hovered === node.id ? 0.08 : 0"
+            class="transition-all duration-300"
+          />
 
-        <!-- Center dot — warm amber pulse -->
-        <circle cx="210" cy="185" r="6" fill="#D97706">
-          <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
-          <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="210" cy="185" r="10" fill="none" stroke="rgba(217,119,6,0.25)" stroke-width="0.5">
-          <animate attributeName="r" values="12;18;12" dur="2s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite" />
-        </circle>
+          <!-- Outer ring -->
+          <circle
+            :cx="node.x" :cy="node.y" :r="node.id === 'center' ? 20 : 26"
+            fill="var(--color-card)"
+            :stroke="hovered === node.id ? node.color : 'var(--color-border)'"
+            :stroke-width="node.id === 'center' ? 2 : 1.5"
+            class="transition-all duration-300"
+          />
 
-        <!-- Domain nodes -->
-        <g v-for="(n, i) in nodes.filter(n => n.label !== '●')" :key="n.label"
-           :href="n.link" class="cursor-pointer"
-           @mouseenter="hovered = n.label" @mouseleave="hovered = null">
-          <circle :cx="n.x" :cy="n.y" r="32" :fill="n.color + '12'"
-                  :stroke="hovered === n.label ? n.color : 'rgba(255,247,237,0.06)'"
-                  :stroke-width="hovered === n.label ? 1.5 : 0.5"
-                  :filter="hovered === n.label ? 'url(#glow-'+n.label+')' : ''"
-                  class="transition-all" style="transition: all 0.18s ease" />
-          <text :x="n.x" :y="n.y + 1" text-anchor="middle" dominant-baseline="middle"
-                :fill="hovered === n.label ? n.color : '#fafaf9'"
-                font-size="14" font-weight="700" style="transition: fill 0.18s ease">
-            {{ n.label }}
+          <!-- Inner dot -->
+          <circle
+            :cx="node.x" :cy="node.y" :r="node.id === 'center' ? 6 : 7"
+            :fill="node.color"
+          />
+
+          <!-- Label -->
+          <text
+            :x="node.x"
+            :y="node.y + (node.id === 'center' ? 32 : 38)"
+            text-anchor="middle"
+            :font-size="node.id === 'center' ? 11 : 13"
+            font-family="JetBrains Mono, ui-monospace, monospace"
+            font-weight="700"
+            :fill="hovered === node.id ? node.color : 'var(--color-text)'"
+            class="transition-colors duration-300"
+          >
+            {{ node.label }}
           </text>
-          <text :x="n.x" :y="n.y + 48" text-anchor="middle" fill="#a8a29e" font-size="10">
-            {{ n.desc }}
-          </text>
-          <defs>
-            <filter :id="'glow-'+n.label" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur :stdDeviation="4" result="blur" />
-              <feFlood :flood-color="n.color" flood-opacity="0.25" />
-              <feComposite in2="blur" operator="in" />
-              <feMerge>
-                <feMergeNode />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-        </g>
-      </svg>
-    </MotionDiv>
+        </a>
+      </g>
+    </svg>
   </MotionDiv>
 </template>

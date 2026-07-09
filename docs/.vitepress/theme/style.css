@@ -6,27 +6,36 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Colors — warm dark (default) */
-  --color-bg: #0C0A09;
-  --color-surface: #1C1917;
-  --color-card: #292524;
-  --color-border: rgba(255, 247, 237, 0.07);
-  --color-primary: #D97706;
-  --color-secondary: #14B8A6;
-  --color-text: #FAFAF9;
-  --color-text-secondary: #A8A29E;
-  --color-success: #65A30D;
-  --color-warning: #EA580C;
-  --color-danger: #DC2626;
+  /* Colors — GitHub cold dark (default dark) */
+  --color-bg: #0D1117;
+  --color-surface: #161B22;
+  --color-card: #21262D;
+  --color-border: rgba(240, 246, 252, 0.06);
+  --color-primary: #58A6FF;
+  --color-secondary: #39D0D8;
+  --color-text: #E6EDF3;
+  --color-text-secondary: #8B949E;
+  --color-success: #3FB950;
+  --color-warning: #D29922;
+  --color-danger: #F85149;
+
+  /* Domain accent colors */
+  --color-ai: #10A37F;
+  --color-java: #ED8B00;
+  --color-go: #00ADD8;
+  --color-web: #3B82F6;
 
   /* Typography */
-  --font-heading: 'Geist', 'Noto Sans SC', system-ui, sans-serif;
+  --font-heading: 'JetBrains Mono', ui-monospace, monospace;
   --font-body: 'Geist', 'Noto Sans SC', system-ui, sans-serif;
   --font-code: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Radius */
   --radius-lg: 24px;
   --radius-card: 14px;
+  --radius-button: 8px;
+  --radius-tag: 4px;
+  --radius-popover: 8px;
 
   /* Shadows */
   --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.12);
@@ -40,16 +49,24 @@
   --motion-section: 500ms;
   --motion-hero: 800ms;
   --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout */
+  --page-max: 1440px;
+  --content-max: 1280px;
+  --section-space: 96px;
+  --gutter-desktop: 80px;
+  --gutter-tablet: 48px;
+  --gutter-mobile: 24px;
 }
 
 /* ── VitePress theme variable overrides (light = default) ── */
 :root {
-  --color-bg: #FEFCF4;
-  --color-surface: #F5F1EB;
+  --color-bg: #FFFFFF;
+  --color-surface: #F6F8FA;
   --color-card: #FFFFFF;
-  --color-border: rgba(28, 25, 23, 0.08);
-  --color-text: #1C1917;
-  --color-text-secondary: #78716C;
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-text: #111827;
+  --color-text-secondary: #6B7280;
 
   --vp-c-bg: var(--color-bg);
   --vp-c-bg-alt: var(--color-surface);
@@ -57,34 +74,34 @@
   --vp-c-bg-soft: var(--color-card);
   --vp-c-text-1: var(--color-text);
   --vp-c-text-2: var(--color-text-secondary);
-  --vp-c-text-3: #A8A29E;
+  --vp-c-text-3: #9CA3AF;
   --vp-c-brand-1: var(--color-primary);
-  --vp-c-brand-2: #F59E0B;
-  --vp-c-brand-3: #92400E;
-  --vp-c-brand-soft: rgba(217, 119, 6, 0.1);
+  --vp-c-brand-2: #218BFF;
+  --vp-c-brand-3: #0969DA;
+  --vp-c-brand-soft: rgba(9, 105, 218, 0.1);
   --vp-c-border: var(--color-border);
   --vp-c-divider: var(--color-border);
   --vp-c-gutter: var(--color-border);
   --vp-button-brand-bg: var(--color-primary);
-  --vp-button-brand-hover-bg: #B45309;
-  --vp-button-brand-text: #FAFAF9;
-  --vp-custom-block-tip-bg: rgba(217, 119, 6, 0.08);
+  --vp-button-brand-hover-bg: #218BFF;
+  --vp-button-brand-text: #FFFFFF;
+  --vp-custom-block-tip-bg: rgba(9, 105, 218, 0.08);
   --vp-custom-block-tip-text: var(--color-primary);
   --vp-sidebar-bg-color: var(--color-bg);
   --vp-local-search-bg: var(--color-card);
   --vp-local-search-result-bg: var(--color-surface);
-  --vp-code-bg: rgba(12, 10, 9, 0.04);
-  --vp-code-color: #B45309;
+  --vp-code-bg: rgba(17, 24, 39, 0.04);
+  --vp-code-color: #0969DA;
 }
 
 /* Dark theme overrides — VitePress toggles .dark on <html> */
 .dark {
-  --color-bg: #0C0A09;
-  --color-surface: #1C1917;
-  --color-card: #292524;
-  --color-border: rgba(255, 247, 237, 0.07);
-  --color-text: #FAFAF9;
-  --color-text-secondary: #A8A29E;
+  --color-bg: #0D1117;
+  --color-surface: #161B22;
+  --color-card: #21262D;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-text: #E6EDF3;
+  --color-text-secondary: #8B949E;
 
   --vp-c-bg: var(--color-bg);
   --vp-c-bg-alt: var(--color-surface);
@@ -92,24 +109,24 @@
   --vp-c-bg-soft: var(--color-card);
   --vp-c-text-1: var(--color-text);
   --vp-c-text-2: var(--color-text-secondary);
-  --vp-c-text-3: #78716C;
+  --vp-c-text-3: #6E7681;
   --vp-c-brand-1: var(--color-primary);
-  --vp-c-brand-2: #F59E0B;
-  --vp-c-brand-3: #B45309;
-  --vp-c-brand-soft: rgba(217, 119, 6, 0.16);
+  --vp-c-brand-2: #79C0FF;
+  --vp-c-brand-3: #A371F7;
+  --vp-c-brand-soft: rgba(88, 166, 255, 0.16);
   --vp-c-border: var(--color-border);
   --vp-c-divider: var(--color-border);
   --vp-c-gutter: var(--color-border);
   --vp-button-brand-bg: var(--color-primary);
-  --vp-button-brand-hover-bg: #F59E0B;
-  --vp-button-brand-text: #FAFAF9;
-  --vp-custom-block-tip-bg: rgba(217, 119, 6, 0.1);
+  --vp-button-brand-hover-bg: #79C0FF;
+  --vp-button-brand-text: #0D1117;
+  --vp-custom-block-tip-bg: rgba(88, 166, 255, 0.1);
   --vp-custom-block-tip-text: var(--color-primary);
   --vp-sidebar-bg-color: var(--color-bg);
   --vp-local-search-bg: var(--color-card);
   --vp-local-search-result-bg: var(--color-surface);
-  --vp-code-bg: rgba(250, 250, 249, 0.04);
-  --vp-code-color: #F59E0B;
+  --vp-code-bg: rgba(230, 237, 243, 0.04);
+  --vp-code-color: #79C0FF;
 }
 
 /* ── Folder Tree Plugin Overrides ── */
@@ -379,33 +396,33 @@
 .vft-status-badge-removed { background-color: var(--color-danger); }
 .vft-status-badge-modified { background-color: var(--color-warning); }
 
-/* Folder icons — warm amber to match site primary */
+/* Folder icons — GitHub blue accent */
 .vft-folder-open-body {
-  fill: #FDE68A;
-  stroke: #D97706;
+  fill: #BDDFFF;
+  stroke: #0969DA;
 }
 
 .vft-folder-open-flap {
-  fill: #FCD34D;
-  stroke: #D97706;
+  fill: #9CD0FF;
+  stroke: #0969DA;
 }
 
 .vft-folder-closed {
-  fill: #F59E0B;
-  stroke: #B45309;
+  fill: #218BFF;
+  stroke: #0969DA;
 }
 
 .dark .vft-folder-open-body {
-  fill: #92400E;
-  stroke: #F59E0B;
+  fill: #1F4F6E;
+  stroke: #58A6FF;
 }
 
 .dark .vft-folder-open-flap {
-  fill: #B45309;
-  stroke: #F59E0B;
+  fill: #2D5B85;
+  stroke: #58A6FF;
 }
 
 .dark .vft-folder-closed {
-  fill: #D97706;
-  stroke: #F59E0B;
+  fill: #58A6FF;
+  stroke: #79C0FF;
 }

@@ -9,6 +9,7 @@ export interface Post {
   category: 'AI' | 'Java' | 'Go' | 'Web'
   words: number
   readingTime: number
+  excerpt: string
 }
 
 const CATEGORY_MAP: Record<string, Post['category']> = {
@@ -24,6 +25,18 @@ function stripFrontmatter(src: string): string {
 
 function countWords(text: string): number {
   return text.replace(/\s+/g, '').length
+}
+
+function makeExcerpt(text: string, limit = 110): string {
+  const cleaned = text
+    .replace(/#+\s+/g, '')
+    .replace(/!?\[.*?\]\(.*?\)/g, '')
+    .replace(/\[.*?\]\(.*?\)/g, '$1')
+    .replace(/[`*_>#\-|]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  if (cleaned.length <= limit) return cleaned
+  return cleaned.slice(0, limit).replace(/\s+\S*$/, '') + '…'
 }
 
 export default createContentLoader('**/*.md', {
@@ -47,6 +60,7 @@ export default createContentLoader('**/*.md', {
           category: category as Post['category'],
           words,
           readingTime: Math.ceil(words / 300),
+          excerpt: makeExcerpt(content),
         }
       })
       .filter((post): post is Post =>

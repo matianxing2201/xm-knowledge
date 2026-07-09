@@ -13,32 +13,37 @@ function formatDate(dateStr: string): string {
   const day = String(d.getDate()).padStart(2, '0')
   return `${y}-${m}-${day}`
 }
+
+const catStyle: Record<string, { color: string; bg: string }> = {
+  AI:   { color: 'var(--color-ai)',   bg: 'rgba(16,163,127,0.12)' },
+  Java: { color: 'var(--color-java)', bg: 'rgba(237,139,0,0.12)' },
+  Go:   { color: 'var(--color-go)',   bg: 'rgba(0,173,216,0.12)' },
+  Web:  { color: 'var(--color-web)',  bg: 'rgba(59,130,246,0.12)' },
+}
 </script>
 
 <template>
-  <a :href="withBase(post.url)" class="group block p-6 rounded-card border border-border bg-card transition-all duration-[var(--motion-card)] ease-[var(--motion-ease)] hover:-translate-y-1.5 hover:shadow-[0_0_0_1px_var(--color-primary)]">
-    <span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-medium mb-3"
-          :class="post.category === 'AI' ? 'text-[#10a37f] bg-[#10a37f]/15' :
-                  post.category === 'Java' ? 'text-[#f89820] bg-[#f89820]/15' :
-                  post.category === 'Go' ? 'text-[#00ADD8] bg-[#00ADD8]/15' :
-                  'text-[#3b82f6] bg-[#3b82f6]/15'">
-      {{ post.category }}
-    </span>
+  <a :href="withBase(post.url)"
+     class="group flex flex-col p-5 h-[200px] rounded-[var(--radius-card)] border border-border bg-card transition-all duration-[180ms] ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-card">
+    <div class="flex items-start justify-between gap-2 mb-2">
+      <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[var(--radius-tag)] text-[11px] font-code font-medium"
+            :style="{ color: (catStyle[post.category] || {}).color, background: (catStyle[post.category] || {}).bg }">
+        {{ post.category }}
+      </span>
+      <span class="text-[11px] font-code text-text-secondary">{{ post.readingTime }} min</span>
+    </div>
 
-    <h3 class="text-[18px] font-semibold text-text mb-2 group-hover:text-primary transition-colors duration-[var(--motion-hover)]">
+    <h3 class="text-[16px] font-semibold text-text mb-2 group-hover:text-primary transition-colors duration-[180ms] leading-snug line-clamp-2">
       {{ post.title }}
     </h3>
 
-    <div class="flex items-center gap-3 text-[13px] text-text-secondary mb-3">
-      <span>{{ formatDate(post.date) }}</span>
-      <span>{{ post.readingTime }} min read</span>
-    </div>
+    <p v-if="post.excerpt" class="text-[13px] text-text-secondary font-body leading-relaxed line-clamp-2 mb-3">
+      {{ post.excerpt }}
+    </p>
 
-    <div v-if="post.tags.length" class="flex flex-wrap gap-1.5">
-      <span v-for="tag in post.tags.slice(0, 2)" :key="tag"
-            class="px-2 py-0.5 rounded-md text-[11px] text-primary bg-primary/10 border border-primary/10">
-        {{ tag }}
-      </span>
+    <div class="flex items-center gap-3 text-[12px] text-text-secondary font-code mt-auto">
+      <span>{{ formatDate(post.lastUpdated || post.date) }}</span>
+      <span v-if="post.tags.length" class="truncate">· {{ post.tags.slice(0, 3).join(' · ') }}</span>
     </div>
   </a>
 </template>

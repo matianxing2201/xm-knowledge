@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 import Lenis from 'lenis'
-import BackgroundCanvas from './BackgroundCanvas.vue'
 import NavbarSection from './NavbarSection.vue'
 import HeroSection from './HeroSection.vue'
-import DomainSection from './DomainSection.vue'
-import RoadmapSection from './RoadmapSection.vue'
-import LatestSection from './LatestSection.vue'
 import StatisticsSection from './StatisticsSection.vue'
+import DomainSection from './DomainSection.vue'
+import TrendingRecentSection from './TrendingRecentSection.vue'
+import KnowledgeSystemSection from './KnowledgeSystemSection.vue'
 import FooterSection from './FooterSection.vue'
+import SearchModal from './SearchModal.vue'
 
 let lenis: Lenis | null = null
 
@@ -24,21 +24,19 @@ onMounted(() => {
   })
 })
 
-onUnmounted(() => {
-  lenis?.destroy()
-})
+onUnmounted(() => { lenis?.destroy() })
 </script>
 
 <template>
-  <div class="bg-bg text-text font-body overflow-x-hidden">
-    <BackgroundCanvas />
+  <div class="bg-bg text-text font-body overflow-x-hidden min-h-screen">
+    <SearchModal />
     <NavbarSection />
     <main>
       <HeroSection />
-      <DomainSection />
-      <RoadmapSection />
-      <LatestSection />
       <StatisticsSection />
+      <DomainSection />
+      <TrendingRecentSection />
+      <KnowledgeSystemSection />
     </main>
     <FooterSection />
   </div>

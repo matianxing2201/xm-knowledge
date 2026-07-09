@@ -16,20 +16,23 @@ export function useStatistics() {
   return computed<SiteStatistics>(() => {
     const posts = all.value
     const tagSet = new Set<string>()
+    const categorySet = new Set<string>()
     let totalWords = 0
     let totalReadingTime = 0
     let latest = ''
 
     for (const p of posts) {
       for (const t of p.tags) tagSet.add(t)
-      totalWords += p.words
-      totalReadingTime += p.readingTime
-      if (!latest || p.lastUpdated > latest) latest = p.lastUpdated
+      if (p.category) categorySet.add(p.category)
+      totalWords += p.words || 0
+      totalReadingTime += p.readingTime || 0
+      const updateDate = p.lastUpdated || p.date
+      if (updateDate && (!latest || updateDate > latest)) latest = updateDate
     }
 
     return {
       articles: posts.length,
-      categories: 4,
+      categories: categorySet.size || 4,
       tags: tagSet.size,
       words: totalWords,
       readingTime: totalReadingTime,

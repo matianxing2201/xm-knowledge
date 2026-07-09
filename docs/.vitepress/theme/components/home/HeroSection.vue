@@ -4,12 +4,12 @@ import KnowledgeCore from './KnowledgeCore.vue'
 </script>
 
 <template>
-  <section class="min-h-screen flex items-center max-w-[1200px] mx-auto px-[120px] pt-[100px] max-lg:px-12 max-sm:px-6">
-    <div class="flex items-center gap-12 w-full">
-      <div class="flex-1">
-        <HeroContent />
+  <section class="h-[720px] max-h-screen flex items-center max-w-[var(--content-max)] mx-auto px-[var(--gutter-desktop)] pt-[60px] max-lg:px-[var(--gutter-tablet)] max-sm:px-[var(--gutter-mobile)]">
+    <div class="grid grid-cols-[58%_42%] gap-20 items-center w-full max-lg:grid-cols-1 max-lg:gap-12">
+      <HeroContent />
+      <div class="hidden lg:flex justify-center">
+        <KnowledgeCore />
       </div>
-      <KnowledgeCore />
     </div>
   </section>
 </template>

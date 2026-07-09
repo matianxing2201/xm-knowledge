@@ -11,13 +11,15 @@ export interface DomainStat {
   articleCount: number
   lastUpdated: string
   hotTags: string[]
+  recentPosts: Post[]
+  tagCount: number
 }
 
 const DOMAIN_META: Omit<DomainStat, 'articleCount' | 'lastUpdated' | 'hotTags'>[] = [
-  { name: 'AI',   icon: 'ri:robot-line',       link: '/ai/',   accent: '#10a37f', desc: 'LangChain · Agent · LLM' },
-  { name: 'Java', icon: 'mdi:coffee',           link: '/java/', accent: '#f89820', desc: 'Spring · JVM · 并发' },
+  { name: 'AI',   icon: 'ri:robot-line',       link: '/ai/',   accent: '#10A37F', desc: 'LangChain · Agent · LLM' },
+  { name: 'Java', icon: 'mdi:coffee',           link: '/java/', accent: '#ED8B00', desc: 'Spring · JVM · 并发' },
   { name: 'Go',   icon: 'mdi:language-go',      link: '/go/',   accent: '#00ADD8', desc: 'Goroutine · Channel · Web' },
-  { name: 'Web',  icon: 'mdi:web',              link: '/web/',  accent: '#3b82f6', desc: 'Vue · React · TypeScript' },
+  { name: 'Web',  icon: 'mdi:web',              link: '/web/',  accent: '#3B82F6', desc: 'Vue · React · TypeScript' },
 ]
 
 function topTags(posts: Post[], limit = 3): string[] {
@@ -39,14 +41,23 @@ export function useDomains() {
   return computed<DomainStat[]>(() =>
     DOMAIN_META.map((meta) => {
       const domainPosts = all.value.filter((p) => p.category === meta.name)
-      const sorted = domainPosts.sort((a, b) =>
-        new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()
-      )
+      const sorted = [...domainPosts].sort((a, b) => {
+        const aDate = a.lastUpdated || a.date
+        const bDate = b.lastUpdated || b.date
+        return new Date(bDate).getTime() - new Date(aDate).getTime()
+      })
+      const tagSet = new Set<string>()
+      for (const p of domainPosts) {
+        for (const t of p.tags) tagSet.add(t)
+      }
+
       return {
         ...meta,
         articleCount: domainPosts.length,
-        lastUpdated: sorted[0]?.lastUpdated || 'N/A',
+        lastUpdated: sorted[0]?.lastUpdated || sorted[0]?.date || 'N/A',
         hotTags: topTags(domainPosts),
+        recentPosts: sorted.slice(0, 3),
+        tagCount: tagSet.size,
       }
     })
   )
