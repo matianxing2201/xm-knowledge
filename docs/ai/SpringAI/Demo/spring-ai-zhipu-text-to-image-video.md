@@ -14,23 +14,33 @@ tags:
 
 ## 1. 整体流程
 
-```
-浏览器 POST /api/image/generate  (文生图)
-  → ImageController
-    → ImageService (Spring AI ImageModel)
-      → 智谱 Cogview-3-Flash (同步返回图片 URL)
-    → 返回图片临时链接
+```mermaid
+flowchart LR
+    A["浏览器 POST /api/image/generate"] --> B[ImageController]
+    B --> C[ImageService<br/>Spring AI ImageModel]
+    C --> D["智谱 Cogview-3-Flash<br/>同步返回图片 URL"]
+    D --> E["图片临时链接"]
 
-浏览器 POST /api/video/generate  (文生视频)
-  → VideoController
-    → VideoService (RestClient 调用智谱 REST API)
-      → 智谱 CogVideoX-Flash (异步返回 taskId)
-    → 返回 taskId
+    F["浏览器 POST /api/video/generate"] --> G[VideoController]
+    G --> H[VideoService<br/>RestClient 调用智谱 API]
+    H --> I["智谱 CogVideoX-Flash<br/>异步返回 taskId"]
+    I --> J["taskId"]
 
-浏览器 GET /api/video/result?taskId=xxx
-  → VideoController
-    → VideoService (查询异步结果)
-    → 返回 videoUrl / finished 状态
+    K["浏览器 GET /api/video/result?taskId=xxx"] --> L[VideoController]
+    L --> M[VideoService<br/>查询异步结果]
+    M --> N["videoUrl / finished 状态"]
+
+    style A fill:#1e3a5f,color:#fff
+    style F fill:#1e3a5f,color:#fff
+    style K fill:#1e3a5f,color:#fff
+    style C fill:#2d4a3e,color:#fff
+    style H fill:#2d4a3e,color:#fff
+    style M fill:#2d4a3e,color:#fff
+    style D fill:#5c3d2e,color:#fff
+    style I fill:#5c3d2e,color:#fff
+    style N fill:#5c3d2e,color:#fff
+    style E fill:#3d3d5c,color:#fff
+    style J fill:#3d3d5c,color:#fff
 ```
 
 ## 2. 项目初始化
@@ -224,6 +234,8 @@ public class VideoService {
         return resp.getId();
     }
 
+![调用智谱 API 返回 taskId](/images/ai/spring-ai/text-to-video-image1.png)
+
     /** 查询视频生成结果 */
     public QueryVideoResult queryVideoResult(String taskId) {
         ZhipuAsyncResultResponse resp = restClient.get()
@@ -240,6 +252,9 @@ public class VideoService {
         }
         return result;
     }
+
+![根据 taskId 查询返回的视频结果](/images/ai/spring-ai/text-to-video-image2.png)
+
 }
 ```
 
