@@ -279,6 +279,10 @@ export default withFolderTree(
                     text: "Spring AI + MiMo TTS 语言生成",
                     link: "/ai/SpringAI/Demo/spring-ai-mimo-tts",
                   },
+                  {
+                    text: "Spring AI + 智谱文生图与视频",
+                    link: "/ai/SpringAI/Demo/spring-ai-zhipu-text-to-image-video",
+                  },
                 ],
               },
             ],
