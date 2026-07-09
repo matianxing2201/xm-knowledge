@@ -189,11 +189,11 @@ export default withFolderTree(
             text: "Monorepo",
             items: [
               { text: "前言", link: "/web/monorepo/前言" },
+              { text: "微前端设计", link: "/web/monorepo/微前端开发设计概念" },
               {
                 text: "案例集成",
                 link: "/web/monorepo/案例-Vue和React项目集成到Monorepo",
               },
-              { text: "微前端设计", link: "/web/monorepo/微前端开发设计概念" },
             ],
           },
         ],

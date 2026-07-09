@@ -9,4 +9,6 @@ title: 前端
 ```tree
 - name: Vite
   href: /xm-knowledge/web/vite/
+- name: Monorepo
+  href: /xm-knowledge/web/monorepo/
 ```
