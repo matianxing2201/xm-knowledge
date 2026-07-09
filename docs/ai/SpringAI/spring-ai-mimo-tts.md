@@ -11,25 +11,25 @@ tags:
 
 ## 1. 整体流程
 
-```mermaid
-flowchart LR
-    A["浏览器 GET /tts?text=..."] --> B["TtsController<br/>@Controller + @ResponseBody"]
-    B --> C["TtsService<br/>RestClient POST"]
-    C --> D["小米 MiMo TTS API<br/>返回 base64 WAV"]
-    D --> E["拼装 HTML<br/>嵌入 data:audio/wav;base64,..."]
-    E --> F["浏览器显示<br/><audio> 播放器"]
-
-    style A fill:#1e3a5f,color:#fff
-    style B fill:#2d4a3e,color:#fff
-    style C fill:#5c3d2e,color:#fff
-    style D fill:#3d3d5c,color:#fff
-    style E fill:#2d4a3e,color:#fff
-    style F fill:#1e3a5f,color:#fff
+```flow
+GET /tts?text=...
+       ↓
+  TtsController
+       ↓
+  TtsService (RestClient POST)
+       ↓
+  小米 MiMo TTS API
+       ↓
+  返回 base64 WAV
+       ↓
+  拼装 HTML → 嵌入 data:audio/wav;base64,...
+       ↓
+  浏览器显示 <audio> 播放器
 ```
 
 ---
 
-## 1. 项目初始化
+## 2. 项目初始化
 
 ### pom.xml 依赖
 

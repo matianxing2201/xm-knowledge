@@ -14,33 +14,36 @@ tags:
 
 ## 1. 整体流程
 
-```mermaid
-flowchart LR
-    A["浏览器 POST /api/image/generate"] --> B[ImageController]
-    B --> C[ImageService<br/>Spring AI ImageModel]
-    C --> D["智谱 Cogview-3-Flash<br/>同步返回图片 URL"]
-    D --> E["图片临时链接"]
+系统分为图片生成和视频生成两条链路：
 
-    F["浏览器 POST /api/video/generate"] --> G[VideoController]
-    G --> H[VideoService<br/>RestClient 调用智谱 API]
-    H --> I["智谱 CogVideoX-Flash<br/>异步返回 taskId"]
-    I --> J["taskId"]
+**文生图流程（同步）：**
+```flow
+POST /api/image/generate
+       ↓
+  ImageController
+       ↓
+  ImageService (Spring AI ImageModel)
+       ↓
+  智谱 Cogview-3-Flash API
+       ↓
+  返回图片临时 URL
+```
 
-    K["浏览器 GET /api/video/result?taskId=xxx"] --> L[VideoController]
-    L --> M[VideoService<br/>查询异步结果]
-    M --> N["videoUrl / finished 状态"]
+**文生视频流程（异步）：**
+```flow
+① POST /api/video/generate
+       ↓
+  VideoController → VideoService
+       ↓
+  智谱 CogVideoX-Flash API
+       ↓
+  返回 taskId
 
-    style A fill:#1e3a5f,color:#fff
-    style F fill:#1e3a5f,color:#fff
-    style K fill:#1e3a5f,color:#fff
-    style C fill:#2d4a3e,color:#fff
-    style H fill:#2d4a3e,color:#fff
-    style M fill:#2d4a3e,color:#fff
-    style D fill:#5c3d2e,color:#fff
-    style I fill:#5c3d2e,color:#fff
-    style N fill:#5c3d2e,color:#fff
-    style E fill:#3d3d5c,color:#fff
-    style J fill:#3d3d5c,color:#fff
+② GET /api/video/result?taskId=xxx
+       ↓
+  VideoController → VideoService 查询结果
+       ↓
+  返回视频 URL / 完成状态
 ```
 
 ## 2. 项目初始化
@@ -402,6 +405,9 @@ GET /paas/v4/async-result/{id}
 ```
 
 判断完成逻辑：先看 `task_status` 是否为 `SUCCESS`，再取 `video_result[0].url`。
+
+![调用智谱 API 返回的 taskId](/images/ai/spring-ai/text-to-video-image1.png)
+![根据 taskId 查询返回的视频结果](/images/ai/spring-ai/text-to-video-image2.png)
 
 ### 注意事项
 

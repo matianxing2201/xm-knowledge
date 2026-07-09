@@ -3,11 +3,9 @@ import { withFolderTree } from "vitepress-plugin-folder-tree";
 import { RssPlugin } from "vitepress-plugin-rss";
 import tailwindcss from "@tailwindcss/vite";
 import { enrichTreeDates } from "./plugins/enrich-tree-dates";
-import { withMermaid } from "vitepress-plugin-mermaid";
 
-export default withMermaid(
-  withFolderTree(
-    defineConfig({
+export default withFolderTree(
+  defineConfig({
       title: "学习笔记",
       description: "个人学习笔记知识库",
       lang: "zh-CN",
@@ -276,22 +274,16 @@ export default withMermaid(
               link: "/ai/SpringAI/",
               items: [
                 {
-                  text: "Demo",
-                  link: "/ai/SpringAI/Demo/",
-                  items: [
-                    {
-                      text: "Spring AI + 智谱多模态图片分析",
-                      link: "/ai/SpringAI/Demo/spring-ai-zhipu-image-analysis",
-                    },
-                    {
-                      text: "Spring AI + MiMo TTS 语言生成",
-                      link: "/ai/SpringAI/Demo/spring-ai-mimo-tts",
-                    },
-                    {
-                      text: "Spring AI + 智谱文生图与视频",
-                      link: "/ai/SpringAI/Demo/spring-ai-zhipu-text-to-image-video",
-                    },
-                  ],
+                  text: "Spring AI + 智谱多模态图片分析",
+                  link: "/ai/SpringAI/spring-ai-zhipu-image-analysis",
+                },
+                {
+                  text: "Spring AI + MiMo TTS 语言生成",
+                  link: "/ai/SpringAI/spring-ai-mimo-tts",
+                },
+                {
+                  text: "Spring AI + 智谱文生图与视频",
+                  link: "/ai/SpringAI/spring-ai-zhipu-text-to-image-video",
                 },
               ],
             },
@@ -316,5 +308,4 @@ export default withMermaid(
         },
       },
     }),
-  ),
 );
