@@ -234,7 +234,7 @@ public class VideoService {
         return resp.getId();
     }
 
-![调用智谱 API 返回 taskId](/images/ai/spring-ai/text-to-video-image1.png)
+
 
     /** 查询视频生成结果 */
     public QueryVideoResult queryVideoResult(String taskId) {
@@ -253,10 +253,13 @@ public class VideoService {
         return result;
     }
 
-![根据 taskId 查询返回的视频结果](/images/ai/spring-ai/text-to-video-image2.png)
+
 
 }
 ```
+
+![执行生成视频 返回的taskId](/images/ai/spring-ai/text-to-video-image1.png)
+![根据 taskId 查询返回的视频结果](/images/ai/spring-ai/text-to-video-image2.png)
 
 > **注意：** `QueryVideoResult` 定义为 `public static class`，VideoService 内部 DTO 为 `static class` + `@Data` + `@JsonIgnoreProperties(ignoreUnknown=true)`，防止智谱新增字段时序列化报错。
 
