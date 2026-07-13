@@ -11,6 +11,8 @@ Spring AI 相关内容。
   href: /xm-knowledge/ai/SpringAI/spring-ai-zhipu-image-analysis
 - name: Spring AI + MiMo TTS 语言生成
   href: /xm-knowledge/ai/SpringAI/spring-ai-mimo-tts
+- name: Spring AI + 小米 MiMo OCR 图片识别
+  href: /xm-knowledge/ai/SpringAI/spring-ai-mimo-ocr
 - name: Spring AI + 智谱文生图与视频
   href: /xm-knowledge/ai/SpringAI/spring-ai-zhipu-text-to-image-video
 ```
