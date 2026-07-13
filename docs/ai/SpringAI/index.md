@@ -15,4 +15,6 @@ Spring AI 相关内容。
   href: /xm-knowledge/ai/SpringAI/spring-ai-mimo-ocr
 - name: Spring AI + 智谱文生图与视频
   href: /xm-knowledge/ai/SpringAI/spring-ai-zhipu-text-to-image-video
+- name: Spring AI + 智谱 AI + Milvus RAG 实战
+  href: /xm-knowledge/ai/SpringAI/spring-ai-zhipu-milvus
 ```
