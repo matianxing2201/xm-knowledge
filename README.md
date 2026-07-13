@@ -61,10 +61,11 @@ xm-knowledge/
 │   │   ├── index.md
 │   │   ├── SpringAI/
 │   │   │   ├── index.md
-│   │   │   └── Demo/
-│   │   │       ├── index.md
-│   │   │       ├── spring-ai-zhipu-image-analysis.md
-│   │   │       └── spring-ai-mimo-tts.md
+│   │   │   ├── spring-ai-mimo-ocr.md
+│   │   │   ├── spring-ai-mimo-tts.md
+│   │   │   ├── spring-ai-zhipu-image-analysis.md
+│   │   │   ├── spring-ai-zhipu-milvus.md
+│   │   │   └── spring-ai-zhipu-text-to-image-video.md
 │   │   └── LangChain/
 │   │       └── index.md
 │   ├── java/                         # Java 学习笔记

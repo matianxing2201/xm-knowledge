@@ -142,9 +142,9 @@ docker run -d \
 
 ![Attu 管理界面](/images/ai/spring-ai/milvus-1.png)
 
-### Spring Boot 集成
+## Spring Boot 集成
 
-#### 项目结构
+### 项目结构
 
 ```
 src/main/java/org/pony/milvus/
@@ -164,7 +164,7 @@ src/main/java/org/pony/milvus/
     └── GlobalExceptionHandler.java   # 全局异常处理
 ```
 
-#### 依赖配置 — pom.xml
+### 依赖配置 — pom.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -261,7 +261,7 @@ src/main/java/org/pony/milvus/
 | `spring-ai-starter-model-zhipuai` | Spring AI 智谱 AI 启动器，自动创建 `EmbeddingModel` 和 `ChatClient.Builder` 的 Bean |
 | `milvus-sdk-java:3.0.3`           | Milvus 官方 SDK，提供 `MilvusClientV2`、`ConnectConfig` 等类                        |
 
-#### 配置 — application.yml
+### 配置 — application.yml
 
 ```yaml
 server:
@@ -293,9 +293,9 @@ milvus:
   index-type: AUTOINDEX # 索引类型：AUTOINDEX 自动选最优
 ```
 
-#### 核心代码
+### 核心代码
 
-##### MilvusConfig — 配置映射
+#### MilvusConfig — 配置映射
 
 ```java
 @Component
@@ -314,7 +314,7 @@ public class MilvusConfig {
 }
 ```
 
-##### MilvusUtil — 核心工具类
+#### MilvusUtil — 核心工具类
 
 `@PostConstruct void init()` 在项目启动时自动执行：
 
@@ -435,9 +435,9 @@ public class MilvusUtil {
 
 ![Milvus 插入数据日志](/images/ai/spring-ai/milvus-2.png)
 
-### RAG 实战
+## RAG 实战
 
-#### 整体流程
+### 整体流程
 
 ```
 用户上传 txt → 拆成多条处方 → embedding 转向量 → 存入 Milvus
@@ -445,7 +445,7 @@ public class MilvusUtil {
 用户提问 → embedding 转向量 → Milvus 搜 top3 → 拼 prompt → 调智谱 AI chat → 返回
 ```
 
-#### 业务服务层 — PrescriptionService
+### 业务服务层 — PrescriptionService
 
 通过构造器注入 4 个依赖：
 
@@ -564,7 +564,7 @@ public class PrescriptionService {
 }
 ```
 
-#### REST 控制器
+### REST 控制器
 
 ```java
 @RestController
@@ -589,7 +589,7 @@ public class PrescriptionController {
 }
 ```
 
-#### 知识库文件格式
+### 知识库文件格式
 
 创建 `感冒知识库.txt`，严格按以下格式：
 
@@ -614,7 +614,7 @@ public class PrescriptionController {
 - 每行用中文冒号 `：` 分隔字段名和值
 - 不同条目之间用空行分隔
 
-#### 运行测试
+### 运行测试
 
 ```bash
 
