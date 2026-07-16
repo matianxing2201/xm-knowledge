@@ -45,7 +45,7 @@ const javaHref = withBase('/java/')
   >
     <nav class="h-full max-w-[var(--content-max)] mx-auto px-[var(--gutter-desktop)] max-lg:px-[var(--gutter-tablet)] max-sm:px-[var(--gutter-mobile)] flex items-center justify-between">
       <!-- Wordmark -->
-      <a :href="withBase('/')" class="font-body font-extrabold text-[16px] tracking-[-0.02em] text-text">
+      <a :href="withBase('/')" class="font-body font-extrabold text-[16px] tracking-[-0.02em] text-white/90">
         XM.
       </a>
 
@@ -54,28 +54,28 @@ const javaHref = withBase('/java/')
         <!-- Inline primary nav link -->
         <a
           :href="javaHref"
-          class="hidden md:inline font-body font-medium text-[15px] text-text/80 hover:text-text transition-colors duration-[var(--motion-hover)]"
+          class="hidden md:inline font-body font-medium text-[15px] text-white/60 hover:text-white/90 transition-colors duration-[var(--motion-hover)]"
         >
           进入笔记
         </a>
 
         <!-- Search affordance -->
         <button
-          class="flex items-center gap-2 h-8 pl-2.5 pr-2 rounded-full border border-white/10 text-text-secondary hover:text-text hover:border-white/30 transition-all duration-[var(--motion-hover)]"
+          class="flex items-center gap-2 h-8 pl-2.5 pr-2 rounded-full border border-white/10 text-white/50 hover:text-white/80 hover:border-white/30 transition-all duration-[var(--motion-hover)]"
           aria-label="Search"
           @click="openSearch"
         >
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          <span class="hidden lg:inline px-1 rounded border border-white/10 text-[10px] font-code text-text-secondary">
+          <span class="hidden lg:inline px-1 rounded border border-white/10 text-[10px] font-code text-white/50">
             {{ isMac ? '⌘K' : 'Ctrl K' }}
           </span>
         </button>
 
         <!-- Mobile menu toggle -->
         <button
-          class="md:hidden flex items-center justify-center w-8 h-8 text-text-secondary hover:text-text transition-colors"
+          class="md:hidden flex items-center justify-center w-8 h-8 text-white/60 hover:text-white/90 transition-colors"
           aria-label="Menu"
           @click="mobileOpen = !mobileOpen"
         >
@@ -94,14 +94,14 @@ const javaHref = withBase('/java/')
     >
       <a
         :href="javaHref"
-        class="block px-6 py-4 font-body font-medium text-[16px] text-text/90 hover:text-text transition-colors"
+        class="block px-6 py-4 font-body font-medium text-[16px] text-white/80 hover:text-white transition-colors"
         @click="mobileOpen = false"
       >
         进入笔记
       </a>
       <a
         :href="archiveHref"
-        class="block px-6 py-4 font-code text-[13px] text-text-secondary hover:text-text transition-colors border-t border-white/[0.06]"
+        class="block px-6 py-4 font-code text-[13px] text-white/50 hover:text-white/80 transition-colors border-t border-white/[0.06]"
         @click="mobileOpen = false"
       >
         归档
