@@ -75,8 +75,7 @@ xm-knowledge/
 │   │   ├── vue/      #   Vue（基础、组件、路由、Vuex、Axios 等）
 │   │   ├── react/    #   React（核心概念、Hook、高级指引）
 │   │   ├── javascript/  # JavaScript（ES6+、函数式编程、正则、DOM）
-│   │   ├── node/     #   Node.js 核心模块
-│   │   ├── typescript/  # TypeScript（泛型、接口、类、函数）
+│   │   ├── typescript/  # TypeScript（初识TS、基础类型、函数、泛型、接口、类）
 │   │   ├── vite/     #   Vite（插件机制、依赖预构建、钩子）
 │   │   ├── network/  #   网络（HTTP、TCP、DNS、跨域、AJAX）
 │   │   ├── css3/     #   CSS3（Flex、BFC、响应式、动画）

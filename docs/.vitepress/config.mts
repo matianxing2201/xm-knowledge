@@ -70,7 +70,6 @@ export default withFolderTree(
           items: [
             { text: "Vite", link: "/web/vite/" },
             { text: "Monorepo", link: "/web/monorepo/" },
-            { text: "Node.js", link: "/web/node/" },
             { text: "TypeScript", link: "/web/typescript/" },
             { text: "React", link: "/web/react/" },
             { text: "Vue", link: "/web/vue/" },
@@ -124,8 +123,106 @@ export default withFolderTree(
             text: "React",
             items: [
               { text: "核心概念", link: "/web/react/核心概念/" },
-              { text: "HOOK", link: "/web/react/hook/" },
+              { text: "HOOK", link: "/web/react/HOOK/" },
               { text: "高级指引", link: "/web/react/高级指引/" },
+            ],
+          },
+        ],
+        "/web/react/核心概念/": [
+          {
+            text: "核心概念",
+            items: [
+              { text: "初识React", link: "/web/react/核心概念/intro-to-react" },
+              {
+                text: "组合与继承、CSS Module",
+                link: "/web/react/核心概念/composition-css-module",
+              },
+              {
+                text: "父子组件数据关系与状态提升",
+                link: "/web/react/核心概念/lifting-state-up",
+              },
+              {
+                text: "非受控组件、受控与非受控选择方案",
+                link: "/web/react/核心概念/uncontrolled-vs-controlled",
+              },
+              {
+                text: "受控组件",
+                link: "/web/react/核心概念/controlled-component",
+              },
+              { text: "列表渲染", link: "/web/react/核心概念/list-rendering" },
+              {
+                text: "条件渲染",
+                link: "/web/react/核心概念/conditional-rendering",
+              },
+              {
+                text: "事件处理函数绑定与事件对象",
+                link: "/web/react/核心概念/event-handling",
+              },
+              {
+                text: "state与setState、单向数据流",
+                link: "/web/react/核心概念/state-setstate",
+              },
+              {
+                text: "组件与Props",
+                link: "/web/react/核心概念/component-and-props",
+              },
+              {
+                text: "渲染元素ReactDOM.render",
+                link: "/web/react/核心概念/reactdom-render",
+              },
+              { text: "JSX", link: "/web/react/核心概念/jsx" },
+            ],
+          },
+        ],
+        "/web/react/HOOK/": [
+          {
+            text: "HOOK",
+            items: [
+              {
+                text: "类组件与函数组件与useState",
+                link: "/web/react/HOOK/class-vs-function-and-useState",
+              },
+              { text: "useReducer", link: "/web/react/HOOK/useReducer" },
+              { text: "Effect Hook", link: "/web/react/HOOK/effect-hook" },
+              { text: "State Hook", link: "/web/react/HOOK/state-hook" },
+              { text: "Hook 规则", link: "/web/react/HOOK/hook-rules" },
+            ],
+          },
+        ],
+        "/web/react/高级指引/": [
+          {
+            text: "高级指引",
+            items: [
+              { text: "深入JSX", link: "/web/react/高级指引/jsx-in-depth" },
+              {
+                text: "Fragment和段语法",
+                link: "/web/react/高级指引/fragments",
+              },
+              { text: "Context API", link: "/web/react/高级指引/context-api" },
+              {
+                text: "Context与组合的应用场景与使用问题",
+                link: "/web/react/高级指引/context-and-composition",
+              },
+              {
+                text: "初识Context的使用场景",
+                link: "/web/react/高级指引/context-use-cases",
+              },
+              {
+                text: "代码分割之错误边界与Suspense和命名导出",
+                link: "/web/react/高级指引/code-splitting-error-boundary-suspense",
+              },
+              {
+                text: "错误边界与使用技巧",
+                link: "/web/react/高级指引/error-boundary",
+              },
+              {
+                text: "代码分割之lazy:Suspense与路由懒加载",
+                link: "/web/react/高级指引/lazy-suspense-route",
+              },
+              {
+                text: "代码分割之import静动态导入",
+                link: "/web/react/高级指引/import-code-splitting",
+              },
             ],
           },
         ],
@@ -147,19 +244,22 @@ export default withFolderTree(
             ],
           },
         ],
-        "/web/node/": [
-          {
-            text: "Node.js",
-            items: [{ text: "核心模块", link: "/web/node/核心模块/" }],
-          },
-        ],
         "/web/typescript/": [
           {
             text: "TypeScript",
             items: [
-              { text: "初识 TS、编译、语法检查", link: "/web/typescript/ts-introduction" },
-              { text: "类型的注释与 any 类型的特点", link: "/web/typescript/type-annotation-any" },
-              { text: "静态语言与动态语言", link: "/web/typescript/static-vs-dynamic" },
+              {
+                text: "初识 TS、编译、语法检查",
+                link: "/web/typescript/ts-introduction",
+              },
+              {
+                text: "类型的注释与 any 类型的特点",
+                link: "/web/typescript/type-annotation-any",
+              },
+              {
+                text: "静态语言与动态语言",
+                link: "/web/typescript/static-vs-dynamic",
+              },
               { text: "基础类型", link: "/web/typescript/basic-types" },
               { text: "函数", link: "/web/typescript/functions" },
               { text: "泛型", link: "/web/typescript/generics" },
