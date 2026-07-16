@@ -1,6 +1,6 @@
 ---
 title: 静态语言与动态语言
-date: 2026-07-09
+date: 2022-01-01
 tags:
   - TypeScript
 ---

@@ -36,53 +36,40 @@ xm-knowledge/
 │   │       │   ├── PageStats.vue       # 页面阅读量统计
 │   │       │   ├── GiscusComments.vue  # Giscus 评论组件
 │   │       │   ├── FileTree.vue        # 文件树组件
-│   │       │   └── home/               # 首页子组件（14 个）
-│   │       │       ├── NavbarSection.vue       # 顶部导航栏
-│   │       │       ├── HeroSection.vue         # Hero 容器
-│   │       │       ├── HeroContent.vue         # Hero 文案 + CTA
-│   │       │       ├── KnowledgeCore.vue       # 知识图谱可视化
-│   │       │       ├── BackgroundCanvas.vue    # 渐变背景 + 噪点
-│   │       │       ├── FloatingParticles.vue   # CSS 粒子动画
-│   │       │       ├── DomainSection.vue       # 分类卡片容器
-│   │       │       ├── DomainCard.vue          # 分类卡片
-│   │       │       ├── RoadmapSection.vue      # 学习路线图
-│   │       │       ├── LatestSection.vue       # 最近更新容器
-│   │       │       ├── ArticleCard.vue         # 文章卡片
-│   │       │       ├── StatisticsSection.vue   # 统计数据
-│   │       │       ├── CountUp.vue             # 数字动画
-│   │       │       └── FooterSection.vue       # 页脚
-│   │       └── composables/         # 组合式函数（5 个）
+│   │       │       └── home/               # 首页子组件
+│   │       │           ├── NavbarSection.vue       # 顶部导航栏（透明→玻璃）
+│   │       │           ├── HeroChapter.vue         # Black Keynote Hero（sticky-pin H1）
+│   │       │           ├── StatsChapter.vue        # 单数字 tick 统计
+│   │       │           ├── DomainStageChapter.vue  # 四域 scroll-cued 交叉渐现
+│   │       │           ├── LatestChapter.vue       # 最新 3 篇极简列表
+│   │       │           ├── FooterSection.vue       # 单行页脚
+│   │       │           └── SearchModal.vue         # 搜索弹窗
+│   │       └── composables/         # 组合式函数
 │   │           ├── useArticles.ts      # 文章数据
 │   │           ├── useDomains.ts       # 分类统计
 │   │           ├── useLatestArticles.ts # 最新文章
+│   │           ├── useHeatmap.ts       # 提交热力图
 │   │           ├── useRoadmap.ts       # 学习路线
 │   │           └── useStatistics.ts    # 全站统计
 │   ├── ai/                           # AI 学习笔记
 │   │   ├── index.md
-│   │   ├── SpringAI/
-│   │   │   ├── index.md
-│   │   │   ├── spring-ai-mimo-ocr.md
-│   │   │   ├── spring-ai-mimo-tts.md
-│   │   │   ├── spring-ai-zhipu-image-analysis.md
-│   │   │   ├── spring-ai-zhipu-milvus.md
-│   │   │   └── spring-ai-zhipu-text-to-image-video.md
-│   │   └── LangChain/
-│   │       └── index.md
+│   │   ├── SpringAI/                 # Spring AI 笔记
+│   │   └── LangChain/                # LangChain 笔记
 │   ├── java/                         # Java 学习笔记
 │   ├── go/                           # Go 学习笔记
 │   ├── web/                          # 前端学习笔记
 │   │   ├── index.md
-│   │   ├── vue/      #   Vue（基础、组件、路由、Vuex、Axios 等）
-│   │   ├── react/    #   React（核心概念、Hook、高级指引）
-│   │   ├── javascript/  # JavaScript（ES6+、函数式编程、正则、DOM）
-│   │   ├── typescript/  # TypeScript（初识TS、基础类型、函数、泛型、接口、类）
-│   │   ├── vite/     #   Vite（插件机制、依赖预构建、钩子）
-│   │   ├── network/  #   网络（HTTP、TCP、DNS、跨域、AJAX）
-│   │   ├── css3/     #   CSS3（Flex、BFC、响应式、动画）
-│   │   ├── html5/    #   HTML5（File、Canvas、WebSocket）
-│   │   └── monorepo/ #   Monorepo 与微前端
-│   ├── archive.md                  # 归档页
-│   └── tags.md                     # 标签页
+│   │   ├── vue/                      # Vue
+│   │   ├── react/                    # React
+│   │   ├── javascript/               # JavaScript
+│   │   ├── typescript/               # TypeScript
+│   │   ├── vite/                     # Vite
+│   │   ├── network/                  # 网络
+│   │   ├── css3/                     # CSS3
+│   │   ├── html5/                    # HTML5
+│   │   └── monorepo/                 # Monorepo 与微前端
+│   ├── archive.md                    # 归档页
+│   └── tags.md                       # 标签页
 ├── .trae/skills/                   # Trae IDE 自定义 Skill
 ├── .github/workflows/
 │   └── deploy.yml                  # CI/CD 部署流水线
@@ -93,15 +80,15 @@ xm-knowledge/
 
 ## 功能特性
 
-| 功能        | 说明                                                  |
-| ----------- | ----------------------------------------------------- |
-| 品牌首页    | Hero + 知识图谱 + 分类卡片 + 路线图 + 最近文章 + 统计 |
-| 标签系统    | 标签云 + 按标签筛选文章                               |
-| 归档页      | 按年月分组展示所有文章                                |
-| 搜索        | VitePress 内置全文搜索                                |
-| Giscus 评论 | 每篇文章底部 GitHub Discussions 评论                  |
-| RSS 订阅    | 自动生成 feed.xml                                     |
-| 文章检查    | `pnpm check <file.md>` 检查文章规范                   |
+| 功能        | 说明                                                    |
+| ----------- | ------------------------------------------------------- |
+| 品牌首页    | Apple Keynote 风格 Hero、滚动叙事、单屏 domain 交叉渐现 |
+| 标签系统    | 标签云 + 按标签筛选文章                                 |
+| 归档页      | 按年月分组展示所有文章                                  |
+| 搜索        | VitePress 内置全文搜索                                  |
+| Giscus 评论 | 每篇文章底部 GitHub Discussions 评论                    |
+| RSS 订阅    | 自动生成 feed.xml                                       |
+| 文章检查    | `pnpm check <file.md>` 检查文章规范                     |
 
 ## 快速开始
 

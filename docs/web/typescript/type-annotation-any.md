@@ -1,6 +1,6 @@
 ---
 title: 类型的注释与 any 类型的特点
-date: 2026-07-09
+date: 2022-01-01
 tags:
   - TypeScript
 ---

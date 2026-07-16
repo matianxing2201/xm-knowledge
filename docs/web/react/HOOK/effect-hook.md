@@ -1,6 +1,6 @@
 ---
 title: Effect Hook
-date: 2026-07-09
+date: 2022-01-01
 tags:
   - React
   - Hook

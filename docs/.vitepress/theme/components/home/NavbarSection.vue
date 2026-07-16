@@ -2,22 +2,16 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { withBase } from 'vitepress'
 
+const scrolled = ref(false)
 const mobileOpen = ref(false)
-
-const navItems = [
-  { label: '首页', href: withBase('/') },
-  { label: '前端', href: withBase('/web/') },
-  { label: 'Java', href: withBase('/java/') },
-  { label: 'AI', href: withBase('/ai/SpringAI/') },
-  { label: 'Go', href: withBase('/go/') },
-  { label: '标签', href: withBase('/tags.html') },
-  { label: '归档', href: withBase('/archive.html') },
-]
-
 const isMac = ref(false)
 
 function openSearch() {
   window.dispatchEvent(new CustomEvent('xm:open-search'))
+}
+
+function onScroll() {
+  scrolled.value = window.scrollY > 12
 }
 
 function onGlobalKey(e: KeyboardEvent) {
@@ -29,64 +23,102 @@ function onGlobalKey(e: KeyboardEvent) {
 
 onMounted(() => {
   isMac.value = navigator.platform.toLowerCase().includes('mac')
+  window.addEventListener('scroll', onScroll, { passive: true })
   document.addEventListener('keydown', onGlobalKey)
 })
-onUnmounted(() => document.removeEventListener('keydown', onGlobalKey))
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+  document.removeEventListener('keydown', onGlobalKey)
+})
+
+const archiveHref = withBase('/archive.html')
+const javaHref = withBase('/java/')
 </script>
 
 <template>
-  <header class="fixed top-0 inset-x-0 z-50 h-[60px] border-b border-border transition-colors duration-200"
-          :class="$route ? '' : ''">
-    <nav class="h-full max-w-[var(--page-max)] mx-auto px-[var(--gutter-desktop)] max-lg:px-[var(--gutter-tablet)] max-sm:px-[var(--gutter-mobile)] flex items-center justify-between">
-      <!-- Logo -->
-      <a href="/xm-knowledge/" class="w-[120px] font-code text-[16px] font-bold text-text tracking-tight">
+  <header
+    class="fixed top-0 inset-x-0 z-50 h-16 transition-colors duration-300"
+    :class="scrolled
+      ? 'border-b border-white/[0.08] nav-glass'
+      : 'border-b border-transparent bg-transparent'"
+  >
+    <nav class="h-full max-w-[var(--content-max)] mx-auto px-[var(--gutter-desktop)] max-lg:px-[var(--gutter-tablet)] max-sm:px-[var(--gutter-mobile)] flex items-center justify-between">
+      <!-- Wordmark -->
+      <a :href="withBase('/')" class="font-body font-extrabold text-[16px] tracking-[-0.02em] text-text">
         XM.
       </a>
 
-      <!-- Desktop Navigation -->
-      <div class="hidden md:flex items-center gap-1">
-        <a v-for="item in navItems" :key="item.href" :href="item.href"
-           class="px-3 py-1.5 text-[14px] font-code font-medium text-text-secondary hover:text-text transition-colors duration-[var(--motion-hover)]">
-          {{ item.label }}
+      <!-- Right cluster -->
+      <div class="flex items-center gap-6">
+        <!-- Inline primary nav link -->
+        <a
+          :href="javaHref"
+          class="hidden md:inline font-body font-medium text-[15px] text-text/80 hover:text-text transition-colors duration-[var(--motion-hover)]"
+        >
+          进入笔记
         </a>
-      </div>
 
-      <!-- Actions -->
-      <div class="flex items-center gap-2">
+        <!-- Search affordance -->
         <button
-          class="hidden sm:flex items-center gap-2 h-8 pl-2.5 pr-3 rounded-[var(--radius-button)] border border-border bg-surface text-[12px] font-code text-text-secondary hover:text-text hover:border-primary/40 hover:bg-card transition-all duration-[var(--motion-hover)]"
+          class="flex items-center gap-2 h-8 pl-2.5 pr-2 rounded-full border border-white/10 text-text-secondary hover:text-text hover:border-white/30 transition-all duration-[var(--motion-hover)]"
+          aria-label="Search"
           @click="openSearch"
         >
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <span class="hidden lg:inline">Search</span>
-          <span class="hidden lg:inline ml-1.5 px-1 rounded border border-border text-[10px] text-text-secondary">{{ isMac ? '⌘K' : 'Ctrl K' }}</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <span class="hidden lg:inline px-1 rounded border border-white/10 text-[10px] font-code text-text-secondary">
+            {{ isMac ? '⌘K' : 'Ctrl K' }}
+          </span>
         </button>
 
-        <a href="https://github.com/matianxing2201/xm-knowledge" target="_blank" rel="noopener"
-           class="hidden sm:flex items-center justify-center w-8 h-8 rounded-[var(--radius-button)] border border-border bg-surface text-text-secondary hover:text-text hover:border-primary/40 hover:bg-card transition-all duration-[var(--motion-hover)]">
-          <svg viewBox="0 0 16 16" class="w-[16px] h-[16px]" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-        </a>
-
-        <button class="md:hidden flex items-center justify-center w-8 h-8 rounded-[var(--radius-button)] border border-border bg-surface text-text-secondary hover:text-text transition-colors" @click="mobileOpen = !mobileOpen">
+        <!-- Mobile menu toggle -->
+        <button
+          class="md:hidden flex items-center justify-center w-8 h-8 text-text-secondary hover:text-text transition-colors"
+          aria-label="Menu"
+          @click="mobileOpen = !mobileOpen"
+        >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path v-if="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            <path v-if="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
     </nav>
-  </header>
 
-  <!-- Mobile menu -->
-  <div v-if="mobileOpen" class="fixed inset-x-0 top-[60px] z-40 md:hidden bg-surface border-b border-border">
-    <div class="flex flex-col p-2">
-      <a v-for="item in navItems" :key="item.href" :href="item.href"
-         class="px-4 py-3 text-[15px] font-code font-medium text-text-secondary hover:text-text hover:bg-primary/5 rounded-lg transition-colors"
-         @click="mobileOpen = false">
-        {{ item.label }}
+    <!-- Mobile sheet -->
+    <div
+      v-if="mobileOpen"
+      class="md:hidden border-t border-white/[0.08] nav-glass-strong"
+    >
+      <a
+        :href="javaHref"
+        class="block px-6 py-4 font-body font-medium text-[16px] text-text/90 hover:text-text transition-colors"
+        @click="mobileOpen = false"
+      >
+        进入笔记
+      </a>
+      <a
+        :href="archiveHref"
+        class="block px-6 py-4 font-code text-[13px] text-text-secondary hover:text-text transition-colors border-t border-white/[0.06]"
+        @click="mobileOpen = false"
+      >
+        归档
       </a>
     </div>
-  </div>
+  </header>
 </template>
+
+<style scoped>
+.nav-glass {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px) saturate(1.8);
+  -webkit-backdrop-filter: blur(16px) saturate(1.8);
+}
+.nav-glass-strong {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+</style>

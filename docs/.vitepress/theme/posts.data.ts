@@ -40,6 +40,7 @@ function makeExcerpt(text: string, limit = 110): string {
 }
 
 export default createContentLoader('**/*.md', {
+  includeSrc: true,
   excerpt: false,
   srcExclude: ['**/superpowers/**'],
   transform(rawData): Post[] {

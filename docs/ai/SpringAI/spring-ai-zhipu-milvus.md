@@ -1,6 +1,7 @@
 ---
 title: Spring AI + 智谱 AI + Milvus RAG 实战
 date: 2026-07-09
+lastUpdated: 2026-07-13
 tags:
   - Spring AI
   - 智谱

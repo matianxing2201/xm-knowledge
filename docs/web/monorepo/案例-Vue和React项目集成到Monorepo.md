@@ -1,6 +1,6 @@
 ---
 title: 案例：将 Vue 和 React 项目及 UI 集成到 Monorepo 架构中
-date: 2026-07-08
+date: 2022-01-01
 tags:
   - Monorepo
   - Vue

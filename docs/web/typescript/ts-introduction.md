@@ -1,6 +1,6 @@
 ---
 title: 初识 TS、编译、语法检查
-date: 2026-07-09
+date: 2022-01-01
 tags:
   - TypeScript
 ---
