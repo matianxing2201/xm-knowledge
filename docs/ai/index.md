@@ -5,4 +5,11 @@ description: AI 学习笔记
 
 # AI
 
-AI 学习笔记目录，文章迁移中...
+```tree
+- name: AI Agent
+  href: /xm-knowledge/ai/AI-Agent/
+- name: Spring AI
+  href: /xm-knowledge/ai/SpringAI/
+- name: LangChain
+  href: /xm-knowledge/ai/LangChain/
+```

@@ -89,6 +89,7 @@ export default withFolderTree(
         {
           text: "AI",
           items: [
+            { text: "AI Agent", link: "/ai/AI-Agent/" },
             { text: "Spring AI", link: "/ai/SpringAI/" },
             { text: "LangChain", link: "/ai/LangChain/" },
           ],
@@ -367,6 +368,16 @@ export default withFolderTree(
           },
         ],
         "/ai/": [
+          {
+            text: "AI Agent",
+            link: "/ai/AI-Agent/",
+            items: [
+              {
+                text: "环境搭建",
+                link: "/ai/AI-Agent/环境搭建",
+              },
+            ],
+          },
           {
             text: "Spring AI",
             link: "/ai/SpringAI/",
