@@ -376,6 +376,10 @@ export default withFolderTree(
                 text: "环境搭建",
                 link: "/ai/AI-Agent/环境搭建",
               },
+              {
+                text: "Chat API：非流式与流式对话实现详解",
+                link: "/ai/AI-Agent/Chat-API-非流式与流式对话实现详解",
+              },
             ],
           },
           {
