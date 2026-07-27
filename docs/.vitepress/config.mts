@@ -371,42 +371,30 @@ export default withFolderTree(
           {
             text: "AI Agent",
             link: "/ai/AI-Agent/",
+            collapsed: true,
             items: [
-              {
-                text: "环境搭建",
-                link: "/ai/AI-Agent/环境搭建",
-              },
-              {
-                text: "Chat API：非流式与流式对话实现详解",
-                link: "/ai/AI-Agent/Chat-API-非流式与流式对话实现详解",
-              },
+              { text: "环境搭建", link: "/ai/AI-Agent/环境搭建" },
+              { text: "Chat API：非流式与流式对话实现详解", link: "/ai/AI-Agent/Chat-API-非流式与流式对话实现详解" },
+              { text: "Function Calling 工具调用机制与实践", link: "/ai/AI-Agent/Function-Calling-工具调用机制与实践" },
+              { text: "LangChain ReAct Agent 实战", link: "/ai/AI-Agent/LangChain-ReAct-Agent-实战" },
             ],
           },
           {
             text: "Spring AI",
             link: "/ai/SpringAI/",
+            collapsed: true,
             items: [
-              {
-                text: "Spring AI + 智谱多模态图片分析",
-                link: "/ai/SpringAI/spring-ai-zhipu-image-analysis",
-              },
-              {
-                text: "Spring AI + MiMo TTS 语言生成",
-                link: "/ai/SpringAI/spring-ai-mimo-tts",
-              },
-              {
-                text: "Spring AI + 智谱文生图与视频",
-                link: "/ai/SpringAI/spring-ai-zhipu-text-to-image-video",
-              },
-              {
-                text: "Spring AI + 智谱 AI + Milvus RAG 实战",
-                link: "/ai/SpringAI/spring-ai-zhipu-milvus",
-              },
+              { text: "Spring AI + 智谱多模态图片分析", link: "/ai/SpringAI/spring-ai-zhipu-image-analysis" },
+              { text: "Spring AI + MiMo TTS 语言生成", link: "/ai/SpringAI/spring-ai-mimo-tts" },
+              { text: "Spring AI + 小米 MiMo OCR 图片识别", link: "/ai/SpringAI/spring-ai-mimo-ocr" },
+              { text: "Spring AI + 智谱文生图与视频", link: "/ai/SpringAI/spring-ai-zhipu-text-to-image-video" },
+              { text: "Spring AI + 智谱 AI + Milvus RAG 实战", link: "/ai/SpringAI/spring-ai-zhipu-milvus" },
             ],
           },
           {
             text: "LangChain",
             link: "/ai/LangChain/",
+            collapsed: true,
             items: [],
           },
         ],
