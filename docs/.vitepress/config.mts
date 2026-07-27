@@ -62,6 +62,10 @@ export default withFolderTree(
       lineNumbers: true,
     },
 
+    ignoreDeadLinks: [
+      /\/xm-knowledge\/ai\/AI-Agent\//,
+    ],
+
     themeConfig: {
       nav: [
         { text: "首页", link: "/" },
