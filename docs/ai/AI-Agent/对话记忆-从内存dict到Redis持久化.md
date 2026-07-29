@@ -231,7 +231,7 @@ $ redis-cli
 
 #### 请求截图
 
-![真实多轮对话调用](/xm-knowledge/images/ai/ai-agent/memory-invoke.png)
+![真实多轮对话调用](/images/ai/ai-agent/memory-invoke.png)
 
 #### 完整对话历史
 
