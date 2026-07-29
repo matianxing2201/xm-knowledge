@@ -33,7 +33,7 @@ onUnmounted(() => {
 })
 
 const archiveHref = withBase('/archive.html')
-const javaHref = withBase('/java/')
+const javaHref = withBase('/ai/AI-Agent/')
 </script>
 
 <template>

@@ -381,6 +381,8 @@ export default withFolderTree(
               { text: "Chat API：非流式与流式对话实现详解", link: "/ai/AI-Agent/Chat-API-非流式与流式对话实现详解" },
               { text: "Function Calling 工具调用机制与实践", link: "/ai/AI-Agent/Function-Calling-工具调用机制与实践" },
               { text: "LangChain ReAct Agent 实战", link: "/ai/AI-Agent/LangChain-ReAct-Agent-实战" },
+              { text: "对话记忆：从内存 dict 到 Redis 持久化", link: "/ai/AI-Agent/对话记忆-从内存dict到Redis持久化" },
+              { text: "请求参数校验：从手写 if 到 Pydantic 模型", link: "/ai/AI-Agent/请求参数校验-从手写if到Pydantic模型" },
             ],
           },
           {

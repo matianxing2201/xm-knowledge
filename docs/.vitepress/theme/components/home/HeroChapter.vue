@@ -33,7 +33,7 @@ const h1Opacity = useTransform(scrollYProgress, [0.4, 1], [1, 0.5])
 const cornerY = useTransform(scrollYProgress, [0, 0.5], [0, -30])
 const cornerOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
 
-const heroHref = withBase('/java/')
+const heroHref = withBase('/ai/AI-Agent/')
 
 const lastUpdate = computed(() => {
   const raw = stats.value?.lastUpdate || ''
