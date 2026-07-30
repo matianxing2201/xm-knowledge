@@ -14,7 +14,7 @@ const DOMAIN_COPY: Record<DomainName, { h2: string; narrative: string }> = {
   AI:   { h2: 'AI,正在长大的一块田。', narrative: 'LangChain · Spring AI · 智谱,LLM 真的落地到代码。' },
 }
 
-const ORDER: DomainName[] = ['Java', 'Web', 'Go', 'AI']
+const ORDER: DomainName[] = ['AI', 'Web', 'Java', 'Go']
 
 const sectionRef = ref<HTMLElement | null>(null)
 const reduced = useReducedMotion()

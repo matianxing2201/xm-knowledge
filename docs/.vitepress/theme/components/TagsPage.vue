@@ -24,6 +24,11 @@ const filteredPosts = computed(() => {
   )
 })
 
+function fmtDate(s: string): string {
+  if (!s) return '—'
+  return s.split('T')[0]
+}
+
 function toggleTag(tag: string) {
   selectedTag.value = selectedTag.value === tag ? null : tag
 }
@@ -54,7 +59,7 @@ function toggleTag(tag: string) {
       <li v-for="post in filteredPosts" :key="post.url">
         <a :href="post.url">
           <span class="post-title">{{ post.title }}</span>
-          <span class="post-date">{{ post.date }}</span>
+          <span class="post-date">{{ fmtDate(post.date) }}</span>
         </a>
       </li>
     </ul>
