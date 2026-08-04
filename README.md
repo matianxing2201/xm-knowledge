@@ -58,8 +58,10 @@ xm-knowledge/
 │   │   │   ├── 环境搭建.md
 │   │   │   ├── Chat-API-非流式与流式对话实现详解.md
 │   │   │   ├── Function-Calling-工具调用机制与实践.md
+│   │   │   ├── Tool-Calling-大模型自主决策实现详解.md
 │   │   │   ├── LangChain-ReAct-Agent-实战.md
 │   │   │   ├── 对话记忆-从内存dict到Redis持久化.md
+│   │   │   ├── 对话记忆-三层记忆MemoryChat实现详解.md
 │   │   │   └── 请求参数校验-从手写if到Pydantic模型.md
 │   │   ├── SpringAI/                 # Spring AI 笔记
 │   │   └── LangChain/                # LangChain 笔记
