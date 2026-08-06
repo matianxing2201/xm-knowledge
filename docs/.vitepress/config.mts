@@ -385,6 +385,7 @@ export default withFolderTree(
               { text: "对话记忆：从内存 dict 到 Redis 持久化", link: "/ai/AI-Agent/对话记忆-从内存dict到Redis持久化" },
               { text: "对话记忆：从 Redis 单层历史到三层记忆（Memory Chat）", link: "/ai/AI-Agent/对话记忆-三层记忆MemoryChat实现详解" },
               { text: "请求参数校验：从手写 if 到 Pydantic 模型", link: "/ai/AI-Agent/请求参数校验-从手写if到Pydantic模型" },
+              { text: "企业级助手 Agent：RAG 检索增强 + 三层记忆", link: "/ai/AI-Agent/企业级助手Agent-RAG检索增强与三层记忆实现" },
             ],
           },
           {
