@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { withBase } from 'vitepress'
 import { data as posts } from '../posts.data.ts'
 
 const selectedTag = ref<string | null>(null)
@@ -57,7 +58,7 @@ function toggleTag(tag: string) {
 
     <ul class="post-list">
       <li v-for="post in filteredPosts" :key="post.url">
-        <a :href="post.url">
+        <a :href="withBase(post.url)">
           <span class="post-title">{{ post.title }}</span>
           <span class="post-date">{{ fmtDate(post.date) }}</span>
         </a>
