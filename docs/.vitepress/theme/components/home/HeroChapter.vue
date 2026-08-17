@@ -98,9 +98,9 @@ const lastUpdate = computed(() => {
         class="hero-corner hero-corner--bl"
         :style="{ y: cornerY, opacity: cornerOpacity }"
       >
-        § 01 / HERO
+        01 / HERO
       </MotionDiv>
-      <div v-else class="hero-corner hero-corner--bl">§ 01 / HERO</div>
+      <div v-else class="hero-corner hero-corner--bl">01 / HERO</div>
 
       <MotionDiv
         v-if="!reduced"

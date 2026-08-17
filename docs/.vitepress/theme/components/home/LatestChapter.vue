@@ -27,7 +27,7 @@ const archiveHref = withBase('/archive.html')
 <template>
   <section class="latest-section">
     <div class="latest-inner">
-      <p class="latest-eyebrow">§ 04 / LATEST</p>
+      <p class="latest-eyebrow">04 / LATEST</p>
       <h2 class="latest-h2">最近写下的几篇。</h2>
 
       <ol class="latest-list">

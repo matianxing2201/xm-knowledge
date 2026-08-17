@@ -131,7 +131,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
             :class="{ 'domain-caption-layer--active': opacityFor(i) > 0.5 }"
             :style="{ opacity: opacityFor(i) }"
           >
-            <p class="domain-eyebrow">§ 03 / DOMAIN ARCHIVE  ·  0{{ i + 1 }} OF 04</p>
+            <p class="domain-eyebrow">03 / DOMAIN ARCHIVE  ·  0{{ i + 1 }} OF 04</p>
             <h2 class="domain-h2">{{ DOMAIN_COPY[d.name].h2 }}</h2>
             <p class="domain-narrative">{{ DOMAIN_COPY[d.name].narrative }}</p>
             <a :href="linkFor(d)" class="domain-cta">

@@ -65,7 +65,7 @@ onMounted(() => {
 
       <!-- Narrative + meta — lower 30% -->
       <div class="stats-foot">
-        <p class="stats-eyebrow">§ 02 / 不断写到现在的笔记数</p>
+        <p class="stats-eyebrow">02 / 不断写到现在的笔记数</p>
         <p class="stats-narrative">自 2024 起,把学到的东西记下来,慢慢攒成 1000 篇。</p>
         <div class="stats-meta">
           <span>WORDS {{ wordsK }}K</span>
