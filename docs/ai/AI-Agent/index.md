@@ -24,4 +24,6 @@ title: AI Agent
   href: /xm-knowledge/ai/AI-Agent/请求参数校验-从手写if到Pydantic模型
 - name: 企业级助手Agent-RAG检索增强与三层记忆实现
   href: /xm-knowledge/ai/AI-Agent/企业级助手Agent-RAG检索增强与三层记忆实现
+- name: 7种RAG方案
+  href: /xm-knowledge/ai/AI-Agent/RAG/index
 ```

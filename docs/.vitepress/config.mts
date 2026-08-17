@@ -386,6 +386,15 @@ export default withFolderTree(
               { text: "对话记忆：从 Redis 单层历史到三层记忆（Memory Chat）", link: "/ai/AI-Agent/对话记忆-三层记忆MemoryChat实现详解" },
               { text: "请求参数校验：从手写 if 到 Pydantic 模型", link: "/ai/AI-Agent/请求参数校验-从手写if到Pydantic模型" },
               { text: "企业级助手 Agent：RAG 检索增强 + 三层记忆", link: "/ai/AI-Agent/企业级助手Agent-RAG检索增强与三层记忆实现" },
+              {
+                text: "7种RAG方案",
+                link: "/ai/AI-Agent/RAG/index",
+                collapsed: true,
+                items: [
+                  { text: "知识库管理模块", link: "/ai/AI-Agent/RAG/knowledge_base/知识库管理模块" },
+                  { text: "Naive RAG 实现", link: "/ai/AI-Agent/RAG/naive_rag/Naive-RAG实现" },
+                ],
+              },
             ],
           },
           {
