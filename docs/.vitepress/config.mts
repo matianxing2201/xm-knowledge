@@ -393,6 +393,7 @@ export default withFolderTree(
                 items: [
                   { text: "知识库管理模块", link: "/ai/AI-Agent/RAG/knowledge_base/知识库管理模块" },
                   { text: "Naive RAG 实现", link: "/ai/AI-Agent/RAG/naive_rag/Naive-RAG实现" },
+                  { text: "Hybrid RAG 实现", link: "/ai/AI-Agent/RAG/hybrid_rag/Hybrid-RAG实现" },
                 ],
               },
             ],

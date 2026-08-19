@@ -12,4 +12,6 @@ RAG（Retrieval-Augmented Generation）是一种将检索与生成相结合的�
   href: /xm-knowledge/ai/AI-Agent/RAG/knowledge_base/知识库管理模块
 - name: Naive RAG 实现
   href: /xm-knowledge/ai/AI-Agent/RAG/naive_rag/Naive-RAG实现
+- name: Hybrid RAG 实现
+  href: /xm-knowledge/ai/AI-Agent/RAG/hybrid_rag/Hybrid-RAG实现
 ```
