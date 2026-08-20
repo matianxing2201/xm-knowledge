@@ -9,9 +9,9 @@ type DomainName = DomainStat['name']
 
 const DOMAIN_COPY: Record<DomainName, { h2: string; narrative: string }> = {
   Java: { h2: 'Java,后端的起点。', narrative: 'Spring · JVM · 并发,记录真实工程里踩过的坑。' },
-  Web:  { h2: 'Web,前端的日常。', narrative: 'Vue · React · TypeScript,从核心语法到框架内部。' },
-  Go:   { h2: 'Go,并发友好的语言。', narrative: 'Goroutine · Channel · GC,把并发写得不难懂。' },
-  AI:   { h2: 'AI,正在长大的一块田。', narrative: 'LangChain · Spring AI · 智谱,LLM 真的落地到代码。' },
+  Web: { h2: 'Web,前端的日常。', narrative: 'Vue · React · TypeScript,从核心语法到框架内部。' },
+  Go: { h2: 'Go,并发友好的语言。', narrative: 'Goroutine · Channel · GC,把并发写得不难懂。' },
+  AI: { h2: 'AI,智能时代的引擎。', narrative: 'LangChain · Spring AI · 智谱，让 LLM 真正落地到代码。' },
 }
 
 const ORDER: DomainName[] = ['AI', 'Web', 'Java', 'Go']
@@ -72,22 +72,13 @@ const linkFor = (d: DomainStat) => withBase(d.link)
 </script>
 
 <template>
-  <section
-    ref="sectionRef"
-    class="domain-section"
-    :class="{ 'domain-section--reduced': reduced }"
-  >
+  <section ref="sectionRef" class="domain-section" :class="{ 'domain-section--reduced': reduced }">
     <!-- Background radial glows — one layer per domain, opacity = fade weight -->
     <div class="domain-glows" aria-hidden="true">
-      <div
-        v-for="(d, i) in ordered"
-        :key="`glow-${d.name}`"
-        class="domain-glow"
-        :style="{
-          background: `radial-gradient(50% 38% at 50% 0%, ${d.accent}38, transparent 70%)`,
-          opacity: opacityFor(i),
-        }"
-      />
+      <div v-for="(d, i) in ordered" :key="`glow-${d.name}`" class="domain-glow" :style="{
+        background: `radial-gradient(50% 38% at 50% 0%, ${d.accent}38, transparent 70%)`,
+        opacity: opacityFor(i),
+      }" />
     </div>
 
     <!-- Sticky stage container -->
@@ -95,12 +86,8 @@ const linkFor = (d: DomainStat) => withBase(d.link)
       <div class="domain-grid">
         <!-- LEFT: pinned specimen panel — 4 layers crossfade -->
         <div class="domain-stage">
-          <div
-            v-for="(d, i) in ordered"
-            :key="`stage-${d.name}`"
-            class="domain-panel"
-            :style="{ opacity: opacityFor(i) }"
-          >
+          <div v-for="(d, i) in ordered" :key="`stage-${d.name}`" class="domain-panel"
+            :style="{ opacity: opacityFor(i) }">
             <div class="domain-panel-meta">
               DOMAIN · 0{{ i + 1 }} / 04
             </div>
@@ -124,14 +111,9 @@ const linkFor = (d: DomainStat) => withBase(d.link)
 
         <!-- RIGHT: caption — 4 layers crossfade -->
         <div class="domain-caption">
-          <div
-            v-for="(d, i) in ordered"
-            :key="`cap-${d.name}`"
-            class="domain-caption-layer"
-            :class="{ 'domain-caption-layer--active': opacityFor(i) > 0.5 }"
-            :style="{ opacity: opacityFor(i) }"
-          >
-            <p class="domain-eyebrow">03 / DOMAIN ARCHIVE  ·  0{{ i + 1 }} OF 04</p>
+          <div v-for="(d, i) in ordered" :key="`cap-${d.name}`" class="domain-caption-layer"
+            :class="{ 'domain-caption-layer--active': opacityFor(i) > 0.5 }" :style="{ opacity: opacityFor(i) }">
+            <p class="domain-eyebrow">03 / DOMAIN ARCHIVE · 0{{ i + 1 }} OF 04</p>
             <h2 class="domain-h2">{{ DOMAIN_COPY[d.name].h2 }}</h2>
             <p class="domain-narrative">{{ DOMAIN_COPY[d.name].narrative }}</p>
             <a :href="linkFor(d)" class="domain-cta">
@@ -149,7 +131,8 @@ const linkFor = (d: DomainStat) => withBase(d.link)
 .domain-section {
   position: relative;
   background: #0A0A0B;
-  height: 400vh;  /* 4 viewports of scroll */
+  height: 400vh;
+  /* 4 viewports of scroll */
 }
 
 .domain-section--reduced {
@@ -164,6 +147,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   height: 100vh;
   pointer-events: none;
 }
+
 .domain-glow {
   position: absolute;
   top: 0;
@@ -197,6 +181,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   position: relative;
   height: 480px;
 }
+
 .domain-panel {
   position: absolute;
   inset: 0;
@@ -208,6 +193,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   background-color: #161B22;
   transition: opacity 60ms linear;
 }
+
 .domain-panel-meta {
   position: absolute;
   top: 24px;
@@ -218,6 +204,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   color: #6B7280;
   letter-spacing: 0.18em;
 }
+
 .domain-panel-dot {
   position: absolute;
   top: 28px;
@@ -226,6 +213,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   height: 8px;
   border-radius: 50%;
 }
+
 .domain-panel-wordmark {
   font-family: var(--font-body);
   font-weight: 800;
@@ -235,25 +223,30 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   text-align: center;
   margin: auto 0;
 }
+
 .domain-panel-divider {
   height: 1px;
   background-color: rgba(255, 255, 255, 0.08);
   margin: 32px 0;
 }
+
 .domain-panel-cols {
   display: flex;
   gap: 32px;
   justify-content: space-between;
 }
+
 .domain-panel-col {
   display: flex;
   flex-direction: column;
   gap: 6px;
   min-width: 0;
 }
-.domain-panel-col + .domain-panel-col {
+
+.domain-panel-col+.domain-panel-col {
   flex: 1.4;
 }
+
 .domain-panel-label {
   font-family: var(--font-code);
   font-size: 11px;
@@ -262,12 +255,14 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+
 .domain-panel-value {
   font-family: var(--font-code);
   font-size: 14px;
   color: #F5F5F7;
   font-weight: 500;
 }
+
 .domain-panel-value--alt {
   font-family: var(--font-body);
   font-size: 15px;
@@ -282,6 +277,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   position: relative;
   min-height: 320px;
 }
+
 .domain-caption-layer {
   position: absolute;
   inset: 0;
@@ -292,9 +288,11 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   transition: opacity 60ms linear;
   pointer-events: none;
 }
+
 .domain-caption-layer--active {
   pointer-events: auto;
 }
+
 .domain-eyebrow {
   font-family: var(--font-code);
   font-size: 14px;
@@ -304,6 +302,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   color: #6B7280;
   margin: 0;
 }
+
 .domain-h2 {
   font-family: var(--font-body);
   font-weight: 700;
@@ -314,6 +313,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   margin: 0;
   max-width: 14ch;
 }
+
 .domain-narrative {
   font-family: var(--font-body);
   font-weight: 500;
@@ -323,6 +323,7 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   max-width: 28ch;
   margin: 0;
 }
+
 .domain-cta {
   font-family: var(--font-body);
   font-weight: 600;
@@ -337,60 +338,125 @@ const linkFor = (d: DomainStat) => withBase(d.link)
   align-self: flex-start;
   transition: border-color 220ms var(--motion-ease);
 }
-.domain-cta:hover { border-bottom-color: #F5F5F7; }
-.domain-cta:hover .domain-cta-arrow { transform: translateX(4px); }
-.domain-cta-arrow { transition: transform 220ms var(--motion-ease); }
+
+.domain-cta:hover {
+  border-bottom-color: #F5F5F7;
+}
+
+.domain-cta:hover .domain-cta-arrow {
+  transform: translateX(4px);
+}
+
+.domain-cta-arrow {
+  transition: transform 220ms var(--motion-ease);
+}
 
 /* Mobile */
 @media (max-width: 1024px) {
   .domain-sticky {
     padding: 0 var(--gutter-tablet);
   }
+
   .domain-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  .domain-stage { height: 320px; }
-  .domain-panel { padding: 40px; }
-  .domain-caption { min-height: 220px; }
+
+  .domain-stage {
+    height: 320px;
+  }
+
+  .domain-panel {
+    padding: 40px;
+  }
+
+  .domain-caption {
+    min-height: 220px;
+  }
 }
 
 @media (max-width: 640px) {
-  .domain-section { height: auto; }
+  .domain-section {
+    height: auto;
+  }
+
   .domain-sticky {
     position: relative;
     top: auto;
     height: auto;
     padding: 80px var(--gutter-mobile);
   }
-  .domain-glows { display: none; }
-  .domain-stage { height: 260px; }
-  .domain-panel { padding: 32px; }
-  .domain-panel-wordmark { font-size: 56px; }
-  .domain-panel-divider { margin: 20px 0; }
-  .domain-h2 { font-size: 32px; }
-  .domain-narrative { font-size: 15px; }
-  .domain-cta { font-size: 15px; }
+
+  .domain-glows {
+    display: none;
+  }
+
+  .domain-stage {
+    height: 260px;
+  }
+
+  .domain-panel {
+    padding: 32px;
+  }
+
+  .domain-panel-wordmark {
+    font-size: 56px;
+  }
+
+  .domain-panel-divider {
+    margin: 20px 0;
+  }
+
+  .domain-h2 {
+    font-size: 32px;
+  }
+
+  .domain-narrative {
+    font-size: 15px;
+  }
+
+  .domain-cta {
+    font-size: 15px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .domain-section { height: auto; }
+  .domain-section {
+    height: auto;
+  }
+
   .domain-sticky {
     position: relative;
     top: auto;
     height: auto;
     padding: 120px var(--gutter-desktop);
   }
-  .domain-glows { display: none; }
+
+  .domain-glows {
+    display: none;
+  }
+
   .domain-panel,
   .domain-caption-layer {
     position: relative;
     inset: auto;
     opacity: 1 !important;
   }
-  .domain-stage { height: auto; }
-  .domain-panel + .domain-panel { margin-top: 32px; }
-  .domain-caption { min-height: auto; }
-  .domain-caption-layer + .domain-caption-layer { margin-top: 40px; }
+
+  .domain-stage {
+    height: auto;
+  }
+
+  .domain-panel+.domain-panel {
+    margin-top: 32px;
+  }
+
+  .domain-caption {
+    min-height: auto;
+  }
+
+  .domain-caption-layer+.domain-caption-layer {
+    margin-top: 40px;
+  }
 }
 </style>

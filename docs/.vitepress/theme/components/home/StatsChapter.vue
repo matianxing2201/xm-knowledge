@@ -65,8 +65,8 @@ onMounted(() => {
 
       <!-- Narrative + meta — lower 30% -->
       <div class="stats-foot">
-        <p class="stats-eyebrow">02 / 不断写到现在的笔记数</p>
-        <p class="stats-narrative">自 2024 起,把学到的东西记下来,慢慢攒成 1000 篇。</p>
+        <p class="stats-eyebrow">02 / 笔记数</p>
+        <p class="stats-narrative">把学到的内容记录下来，攒成自己的知识库。</p>
         <div class="stats-meta">
           <span>WORDS {{ wordsK }}K</span>
           <span class="stats-meta-sep">·</span>
@@ -88,6 +88,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
 }
+
 .stats-hairline-top {
   position: absolute;
   top: 0;
@@ -96,6 +97,7 @@ onMounted(() => {
   height: 1px;
   background-color: rgba(255, 255, 255, 0.06);
 }
+
 .stats-rail {
   position: absolute;
   top: 0;
@@ -104,8 +106,14 @@ onMounted(() => {
   background-color: rgba(255, 255, 255, 0.04);
   pointer-events: none;
 }
-.stats-rail--25 { left: 25%; }
-.stats-rail--75 { left: 75%; }
+
+.stats-rail--25 {
+  left: 25%;
+}
+
+.stats-rail--75 {
+  left: 75%;
+}
 
 .stats-inner {
   width: 100%;
@@ -168,25 +176,57 @@ onMounted(() => {
   gap: 12px;
   align-items: center;
 }
+
 .stats-meta-sep {
   color: rgba(255, 255, 255, 0.18);
 }
 
 @media (max-width: 1024px) {
-  .stats-section { padding: 100px var(--gutter-tablet); }
-  .stats-rail--25 { left: 16%; }
-  .stats-rail--75 { left: 84%; }
-  .stats-number { margin-bottom: 56px; }
+  .stats-section {
+    padding: 100px var(--gutter-tablet);
+  }
+
+  .stats-rail--25 {
+    left: 16%;
+  }
+
+  .stats-rail--75 {
+    left: 84%;
+  }
+
+  .stats-number {
+    margin-bottom: 56px;
+  }
 }
+
 @media (max-width: 640px) {
-  .stats-section { padding: 80px var(--gutter-mobile); min-height: auto; }
-  .stats-rail { display: none; }
-  .stats-number { font-size: 96px; margin-bottom: 40px; }
-  .stats-narrative { font-size: 18px; }
-  .stats-meta { font-size: 11px; gap: 8px; }
+  .stats-section {
+    padding: 80px var(--gutter-mobile);
+    min-height: auto;
+  }
+
+  .stats-rail {
+    display: none;
+  }
+
+  .stats-number {
+    font-size: 96px;
+    margin-bottom: 40px;
+  }
+
+  .stats-narrative {
+    font-size: 18px;
+  }
+
+  .stats-meta {
+    font-size: 11px;
+    gap: 8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stats-number { opacity: 1; }
+  .stats-number {
+    opacity: 1;
+  }
 }
 </style>
