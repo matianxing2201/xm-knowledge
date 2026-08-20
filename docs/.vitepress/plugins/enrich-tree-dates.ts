@@ -110,6 +110,7 @@ function enrichTreeBlock(treeLines: string[]): string[] {
     const itemLines = item.lines;
     let href = "";
     let hasNote = false;
+    let hasChildren = false;
     for (const l of itemLines) {
       const trimmed = l.trim();
       if (trimmed.startsWith("href:")) {
@@ -118,8 +119,12 @@ function enrichTreeBlock(treeLines: string[]): string[] {
       if (trimmed.startsWith("note:")) {
         hasNote = true;
       }
+      if (trimmed.startsWith("children:")) {
+        hasChildren = true;
+      }
     }
-    if (!href || hasNote) continue;
+    // 跳过文件夹节点(带 children),避免 note 插入破坏嵌套结构
+    if (!href || hasNote || hasChildren) continue;
 
     const filePath = resolveFile(href);
     if (!filePath) continue;

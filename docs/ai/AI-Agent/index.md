@@ -26,4 +26,14 @@ title: AI Agent
   href: /xm-knowledge/ai/AI-Agent/企业级助手Agent-RAG检索增强与三层记忆实现
 - name: 7种RAG方案
   href: /xm-knowledge/ai/AI-Agent/RAG/index
+  open: true
+  children:
+    - name: 知识库管理模块
+      href: /xm-knowledge/ai/AI-Agent/RAG/knowledge_base/知识库管理模块
+    - name: Naive RAG 实现
+      href: /xm-knowledge/ai/AI-Agent/RAG/naive_rag/Naive-RAG实现
+    - name: Hybrid RAG 实现
+      href: /xm-knowledge/ai/AI-Agent/RAG/hybrid_rag/Hybrid-RAG实现
+    - name: Agentic RAG 实现
+      href: /xm-knowledge/ai/AI-Agent/RAG/agentic_rag/Agentic-RAG实现
 ```
