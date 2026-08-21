@@ -255,11 +255,100 @@ def parent_upload():
 
 ![Parent-Document RAG 入库结果](/images/rag/parent-doc-rag-2.png)
 
-## P2 查询流程 — /parent/query（占位）
+## P2 查询流程 — /parent/query
 
-> ⚠️ 本篇只覆盖 P1 入库部分。查询侧「子块向量检索 → 父 id 去重 → 父块全文 → LLM 生成」暂占位，后续补充。
+查询链「**小块找得准、大块读得全**」：命中的是小块的向量，回传的是大块的全文：
 
-接口已就位：
+```
+用户提问 → 子块向量检索(TOP_K) → parent_id 去重 → 回取父块全文 → 拼 prompt → SSE 流式回答
+```
+
+### 检索双子 — store.py
+
+P1 入库时说了两种存储对应两种查询，查询侧的方法现在补全。**子块检索**只取 `text + parent_id`，小块负责「定位」：
+
+```python
+class ChildStore:
+    def search(self, query_vector: list[float], top_k: int) -> list[dict]:
+        """向量检索子块，返回命中的 {text, parent_id, score}。"""
+        self.ensure_collection()
+        results = self.client.search(
+            collection_name=self.collection_name,
+            data=[query_vector],
+            limit=top_k,
+            output_fields=["text", "parent_id"],  # ==命中只取 text + parent_id，够拼接父块即可==
+        )
+        return [
+            {
+                "text": r["entity"]["text"],
+                "parent_id": r["entity"]["parent_id"],
+                "score": r["distance"],
+            }
+            for r in results[0]
+        ]
+```
+
+**父块取全文**按 `parent_id` 精确取 KV，跳过不存在的 id：
+
+```python
+class ParentStore:
+    def get_many(self, parent_ids: list[str]) -> list[dict]:
+        """按入参顺序取父块全文（跳过不存在的 id），供拼接上下文。"""
+        data = self._load()
+        return [
+            {"parent_id": pid, "text": data[pid]}
+            for pid in parent_ids
+            if pid in data
+        ]
+```
+
+> ==`output_fields` 控制命中返回哪些字段：只要 `text` 和 `parent_id`。父块全文是 LLM 的上下文。==
+
+### 查询编排 — services.py
+
+`answer_question_stream` 串起「检索 → 去重 → 取父块 → 流式生成」，全程 SSE：
+
+```python
+def answer_question_stream(query: str):
+    """流式回答：先发 sources（命中的父块全文），再逐块流式生成答案（SSE）。"""
+    scheme = _scheme()
+
+    hits = ChildStore(scheme["COLLECTION_NAME"]).search(
+        kb_services.embed_text(query), scheme["TOP_K"]
+    )
+    # 多个子块可能命中同一父块，按父 id 去重且保持命中顺序
+    parent_ids = list(dict.fromkeys(h["parent_id"] for h in hits))
+    sources = ParentStore(scheme["COLLECTION_NAME"]).get_many(parent_ids)
+
+    yield _sse({"type": "sources", "sources": sources})
+
+    medical_record = "\n\n".join(s["text"] for s in sources)
+    messages = [
+        {"role": "system", "content": prompts.SYSTEM_PROMPT},
+        {
+            "role": "user",
+            "content": f"----用户症状----\n{query}\n\n----中医病例记录----\n{medical_record}",
+        },
+    ]
+    for chunk in _llm().stream(messages):
+        if getattr(chunk, "content", None):
+            yield _sse({"type": "delta", "content": chunk.content})
+    yield _sse({"type": "done"})
+```
+
+**核心要点：**
+
+| 代码/概念                       | 说明                                           |
+| ------------------------------- | ---------------------------------------------- |
+| `ChildStore.search` + `TOP_K=3` | 子块向量检索，小块负责「定位」哪段最像         |
+| `dict.fromkeys`                 | 多个子块命中同一父块时去重，且保留首次命中顺序 |
+| `ParentStore.get_many`          | 按父 id 精确取大块全文，大块负责「上下文」     |
+| `_sse()`                        | 把事件包装成 `data: {json}\n\n` 的 SSE 帧      |
+| `_llm().stream()`               | ChatOpenAI 流式生成，逐 chunk 发 delta         |
+
+> 向量库里查到的是 300 字子块，拼给 LLM 的是 800 字父块全文——检索粒度与上下文粒度解耦。
+
+### SSE 流式接口 — controllers.py
 
 ```python
 @bp.route("/parent/query", methods=["POST"])
@@ -270,14 +359,19 @@ def parent_query():
     if not query_text:
         return {"error": "query 不能为空"}, 400
 
-    return jsonify(services.answer_question(query_text))
+    return Response(
+        stream_with_context(services.answer_question_stream(query_text)),
+        mimetype="text/event-stream",
+    )
 ```
 
-预期的查询链路（P2 待展开）：
+> ==`stream_with_context` 让生成器在 Flask 请求上下文中执行；`mimetype="text/event-stream"` 声明 SSE 流。返回的不是完整 JSON，而是依次推送三类事件：==
 
-```
-用户提问 → 子块向量检索(TOP_K) → parent_id 集合(去重) → 回取父块全文 → 拼 prompt → LLM
-```
+| 事件 type | 内容               | 时机             |
+| --------- | ------------------ | ---------------- |
+| `sources` | 命中的父块全文列表 | 检索完成后先发   |
+| `delta`   | LLM 生成的增量片段 | 生成过程中逐块发 |
+| `done`    | 结束标记           | 全部生成完后发   |
 
 ![Parent-Document RAG 查询结果](/images/rag/parent-doc-rag-3.png)
 
@@ -288,6 +382,7 @@ def parent_query():
 - 双层表示化解「切大块检索不准、切小块语义残缺」的两难
 - 子块（小）存向量库负责检索精度，父块（大）存 KV 负责语义完整
 - 子块带 `parent_id` 指针，命中后回取父块全文，解决「切片切碎语义」
+- 查询侧「小块找得准、大块读得全」：向量检索命中子块 → 父 id 去重 → 取父块全文 → SSE 流式回答
 - 本方案模块自包含，只复用 `knowledge_base` 的向量化组件，不入侵单层 schema
 
 **适合**
@@ -297,10 +392,15 @@ def parent_query():
 
 **知识点总结**
 
-| 知识点                           | 说明                                                 |
-| -------------------------------- | ---------------------------------------------------- |
-| `RecursiveCharacterTextSplitter` | LangChain 递归切分器，按段落→句子→标点逐级切         |
-| `keep_separator=True`            | 分隔符保留在块尾，避免切段丢标点                     |
-| `parent_id`                      | 子块指向父块的指针字段，Milvus schema 多出的一列     |
-| 双重存储                         | 子块→Milvus（向量检索），父块→JSON 文件（KV 精确取） |
-| `uuid.uuid4()`                   | 生成父块主键，保证唯一且不可枚举                     |
+| 知识点                           | 说明                                                    |
+| -------------------------------- | ------------------------------------------------------- |
+| `RecursiveCharacterTextSplitter` | LangChain 递归切分器，按段落→句子→标点逐级切            |
+| `keep_separator=True`            | 分隔符保留在块尾，避免切段丢标点                        |
+| `parent_id`                      | 子块指向父块的指针字段，Milvus schema 多出的一列        |
+| 双重存储                         | 子块→Milvus（向量检索），父块→JSON 文件（KV 精确取）    |
+| `uuid.uuid4()`                   | 生成父块主键，保证唯一且不可枚举                        |
+| `output_fields`                  | Milvus 检索命中只返回 text + parent_id，够定位即可      |
+| `dict.fromkeys`                  | 子块命中同一父块时去重，且保留首次命中顺序              |
+| SSE 流式回答                     | sources → delta → done 三类事件逐帧推送                 |
+| `stream_with_context`            | 生成器在 Flask 请求上下文中执行，配合 SSE 声明 mimetype |
+| `EventSource` 限制               | 只支持 GET，POST 场景用 fetch 手动解析 SSE 流           |

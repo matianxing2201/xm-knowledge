@@ -62,9 +62,7 @@ export default withFolderTree(
       lineNumbers: true,
     },
 
-    ignoreDeadLinks: [
-      /\/xm-knowledge\/ai\/AI-Agent\//,
-    ],
+    ignoreDeadLinks: [/\/xm-knowledge\/ai\/AI-Agent\//],
 
     themeConfig: {
       nav: [
@@ -374,41 +372,93 @@ export default withFolderTree(
         "/ai/": [
           {
             text: "AI Agent",
-            link: "/ai/AI-Agent/",
             collapsed: true,
             items: [
               { text: "环境搭建", link: "/ai/AI-Agent/环境搭建" },
-              { text: "Chat API：非流式与流式对话实现详解", link: "/ai/AI-Agent/Chat-API-非流式与流式对话实现详解" },
-              { text: "Function Calling 工具调用机制与实践", link: "/ai/AI-Agent/Function-Calling-工具调用机制与实践" },
-              { text: "Tool Calling 大模型自主决策实现详解", link: "/ai/AI-Agent/Tool-Calling-大模型自主决策实现详解" },
-              { text: "LangChain ReAct Agent 实战", link: "/ai/AI-Agent/LangChain-ReAct-Agent-实战" },
-              { text: "对话记忆：从内存 dict 到 Redis 持久化", link: "/ai/AI-Agent/对话记忆-从内存dict到Redis持久化" },
-              { text: "对话记忆：从 Redis 单层历史到三层记忆（Memory Chat）", link: "/ai/AI-Agent/对话记忆-三层记忆MemoryChat实现详解" },
-              { text: "请求参数校验：从手写 if 到 Pydantic 模型", link: "/ai/AI-Agent/请求参数校验-从手写if到Pydantic模型" },
-              { text: "企业级助手 Agent：RAG 检索增强 + 三层记忆", link: "/ai/AI-Agent/企业级助手Agent-RAG检索增强与三层记忆实现" },
+              {
+                text: "Chat API：非流式与流式对话实现详解",
+                link: "/ai/AI-Agent/Chat-API-非流式与流式对话实现详解",
+              },
+              {
+                text: "Function Calling 工具调用机制与实践",
+                link: "/ai/AI-Agent/Function-Calling-工具调用机制与实践",
+              },
+              {
+                text: "Tool Calling 大模型自主决策实现详解",
+                link: "/ai/AI-Agent/Tool-Calling-大模型自主决策实现详解",
+              },
+              {
+                text: "LangChain ReAct Agent 实战",
+                link: "/ai/AI-Agent/LangChain-ReAct-Agent-实战",
+              },
+              {
+                text: "对话记忆：从内存 dict 到 Redis 持久化",
+                link: "/ai/AI-Agent/对话记忆-从内存dict到Redis持久化",
+              },
+              {
+                text: "对话记忆：从 Redis 单层历史到三层记忆（Memory Chat）",
+                link: "/ai/AI-Agent/对话记忆-三层记忆MemoryChat实现详解",
+              },
+              {
+                text: "请求参数校验：从手写 if 到 Pydantic 模型",
+                link: "/ai/AI-Agent/请求参数校验-从手写if到Pydantic模型",
+              },
+              {
+                text: "企业级助手 Agent：RAG 检索增强 + 三层记忆",
+                link: "/ai/AI-Agent/企业级助手Agent-RAG检索增强与三层记忆实现",
+              },
               {
                 text: "7种RAG方案",
-                link: "/ai/AI-Agent/RAG/index",
                 collapsed: true,
                 items: [
-                  { text: "知识库管理模块", link: "/ai/AI-Agent/RAG/knowledge_base/知识库管理模块" },
-                  { text: "Naive RAG 实现", link: "/ai/AI-Agent/RAG/naive_rag/Naive-RAG实现" },
-                  { text: "Hybrid RAG 实现", link: "/ai/AI-Agent/RAG/hybrid_rag/Hybrid-RAG实现" },
-                  { text: "Agentic RAG 实现", link: "/ai/AI-Agent/RAG/agentic_rag/Agentic-RAG实现" },
+                  {
+                    text: "知识库管理模块",
+                    link: "/ai/AI-Agent/RAG/knowledge_base/知识库管理模块",
+                  },
+                  {
+                    text: "Naive RAG 实现",
+                    link: "/ai/AI-Agent/RAG/naive_rag/Naive-RAG实现",
+                  },
+                  {
+                    text: "Hybrid RAG 实现",
+                    link: "/ai/AI-Agent/RAG/hybrid_rag/Hybrid-RAG实现",
+                  },
+                  {
+                    text: "Agentic RAG 实现",
+                    link: "/ai/AI-Agent/RAG/agentic_rag/Agentic-RAG实现",
+                  },
+                  {
+                    text: "Parent-Document RAG 实现",
+                    link: "/ai/AI-Agent/RAG/parent_document_rag/Parent-Document-RAG实现",
+                  },
                 ],
               },
             ],
           },
           {
             text: "Spring AI",
-            link: "/ai/SpringAI/",
             collapsed: true,
             items: [
-              { text: "Spring AI + 智谱多模态图片分析", link: "/ai/SpringAI/spring-ai-zhipu-image-analysis" },
-              { text: "Spring AI + MiMo TTS 语言生成", link: "/ai/SpringAI/spring-ai-mimo-tts" },
-              { text: "Spring AI + 小米 MiMo OCR 图片识别", link: "/ai/SpringAI/spring-ai-mimo-ocr" },
-              { text: "Spring AI + 智谱文生图与视频", link: "/ai/SpringAI/spring-ai-zhipu-text-to-image-video" },
-              { text: "Spring AI + 智谱 AI + Milvus RAG 实战", link: "/ai/SpringAI/spring-ai-zhipu-milvus" },
+              {
+                text: "Spring AI + 智谱多模态图片分析",
+                link: "/ai/SpringAI/spring-ai-zhipu-image-analysis",
+              },
+              {
+                text: "Spring AI + MiMo TTS 语言生成",
+                link: "/ai/SpringAI/spring-ai-mimo-tts",
+              },
+              {
+                text: "Spring AI + 小米 MiMo OCR 图片识别",
+                link: "/ai/SpringAI/spring-ai-mimo-ocr",
+              },
+              {
+                text: "Spring AI + 智谱文生图与视频",
+                link: "/ai/SpringAI/spring-ai-zhipu-text-to-image-video",
+              },
+              {
+                text: "Spring AI + 智谱 AI + Milvus RAG 实战",
+                link: "/ai/SpringAI/spring-ai-zhipu-milvus",
+              },
             ],
           },
           {
