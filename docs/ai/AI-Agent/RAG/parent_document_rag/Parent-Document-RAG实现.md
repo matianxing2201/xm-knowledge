@@ -251,7 +251,9 @@ def parent_upload():
 { "parent_count": 2, "child_count": 15 }
 ```
 
-![Parent-Document RAG 运行示意图](/images/rag/parent-doc-rag-1.png)
+![Parent-Document RAG 整体流程](/images/rag/parent-doc-rag-1.png)
+
+![Parent-Document RAG 入库结果](/images/rag/parent-doc-rag-2.png)
 
 ## P2 查询流程 — /parent/query（占位）
 
@@ -276,6 +278,8 @@ def parent_query():
 ```
 用户提问 → 子块向量检索(TOP_K) → parent_id 集合(去重) → 回取父块全文 → 拼 prompt → LLM
 ```
+
+![Parent-Document RAG 查询结果](/images/rag/parent-doc-rag-3.png)
 
 ## 小结
 
