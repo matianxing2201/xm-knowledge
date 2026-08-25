@@ -431,6 +431,10 @@ export default withFolderTree(
                     text: "Parent-Document RAG 实现",
                     link: "/ai/AI-Agent/RAG/parent_document_rag/Parent-Document-RAG实现",
                   },
+                  {
+                    text: "Self-RAG 实现",
+                    link: "/ai/AI-Agent/RAG/self_rag/Self-RAG实现",
+                  },
                 ],
               },
             ],

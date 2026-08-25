@@ -396,11 +396,8 @@ def parent_query():
 | -------------------------------- | ------------------------------------------------------- |
 | `RecursiveCharacterTextSplitter` | LangChain 递归切分器，按段落→句子→标点逐级切            |
 | `keep_separator=True`            | 分隔符保留在块尾，避免切段丢标点                        |
-| `parent_id`                      | 子块指向父块的指针字段，Milvus schema 多出的一列        |
 | 双重存储                         | 子块→Milvus（向量检索），父块→JSON 文件（KV 精确取）    |
-| `uuid.uuid4()`                   | 生成父块主键，保证唯一且不可枚举                        |
 | `output_fields`                  | Milvus 检索命中只返回 text + parent_id，够定位即可      |
 | `dict.fromkeys`                  | 子块命中同一父块时去重，且保留首次命中顺序              |
-| SSE 流式回答                     | sources → delta → done 三类事件逐帧推送                 |
 | `stream_with_context`            | 生成器在 Flask 请求上下文中执行，配合 SSE 声明 mimetype |
 | `EventSource` 限制               | 只支持 GET，POST 场景用 fetch 手动解析 SSE 流           |
