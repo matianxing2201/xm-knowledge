@@ -38,4 +38,6 @@ title: AI Agent
       href: /xm-knowledge/ai/AI-Agent/RAG/agentic_rag/Agentic-RAG实现
     - name: Parent-Document RAG 实现
       href: /xm-knowledge/ai/AI-Agent/RAG/parent_document_rag/Parent-Document-RAG实现
+    - name: Self-RAG 实现
+      href: /xm-knowledge/ai/AI-Agent/RAG/self_rag/Self-RAG实现
 ```
