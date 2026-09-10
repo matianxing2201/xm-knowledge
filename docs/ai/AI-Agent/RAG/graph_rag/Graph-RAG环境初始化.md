@@ -571,7 +571,7 @@ controllers
 
 先把几个最基础的东西验证一下。
 
-## 1. Elasticsearch 版本
+### 1. Elasticsearch 版本
 
 ```bash
 curl -s http://127.0.0.1:9200 | python3 -m json.tool
@@ -596,7 +596,7 @@ curl -s http://127.0.0.1:9200 | python3 -m json.tool
 
 ---
 
-## 2. 确认 IK 到底有没有装
+### 2. 确认 IK 到底有没有装
 
 这个比看 Docker 容器状态更直接：
 
@@ -655,7 +655,7 @@ version -> 8.19.21
 
 ---
 
-## 这里碰到一个小坑
+### 这里碰到一个小坑
 
 ES 没启动的时候：
 
@@ -693,7 +693,7 @@ es.ping()
 
 ---
 
-## 另外一个启动时序问题
+### 另外一个启动时序问题
 
 Docker 显示：
 
