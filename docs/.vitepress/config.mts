@@ -458,6 +458,14 @@ const config = withMermaid(
                       text: "Self-RAG 实现",
                       link: "/ai/AI-Agent/RAG/self_rag/Self-RAG实现",
                     },
+                    {
+                      text: "Corrective-RAG 实现",
+                      link: "/ai/AI-Agent/RAG/corrective_rag/Corrective-RAG实现",
+                    },
+                    {
+                      text: "Graph RAG 环境初始化",
+                      link: "/ai/AI-Agent/RAG/graph_rag/Graph-RAG环境初始化",
+                    },
                   ],
                 },
               ],

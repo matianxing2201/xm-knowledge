@@ -22,4 +22,6 @@ RAG（Retrieval-Augmented Generation）是一种将检索与生成相结合的�
   href: /xm-knowledge/ai/AI-Agent/RAG/self_rag/Self-RAG实现
 - name: Corrective-RAG 实现
   href: /xm-knowledge/ai/AI-Agent/RAG/corrective_rag/Corrective-RAG实现
+- name: Graph RAG 环境初始化
+  href: /xm-knowledge/ai/AI-Agent/RAG/graph_rag/Graph-RAG环境初始化
 ```
