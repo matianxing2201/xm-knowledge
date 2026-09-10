@@ -12,50 +12,95 @@ tags:
 
 # Graph RAG 环境初始化
 
-前面的 RAG 全是 Milvus 一条路走到底——向量检索。要往 Graph RAG 走，得再补两块地基：中文关键词检索（Elasticsearch + IK）和图数据库（Neo4j）。
+前面的 RAG 基本都是围绕 Milvus 做向量检索。
 
-这篇只做环境，不写业务代码。Neo4j 也先放着，另开一篇再说，所以下面看到 `neo4j/` 子包和 `NEO4J_*` 配置，知道「已经建好但没动」就行。
+继续往 Graph RAG 走，光有向量数据库还不够，至少还需要两块基础设施：
+
+- **Elasticsearch**：负责关键词、全文检索，以及后面 Graph RAG 里的混合检索
+- **Neo4j**：负责实体、关系和知识图谱
+
+所以这次先不急着写 Graph RAG 本身，先把 Elasticsearch + IK 和 Neo4j 的运行环境搭起来。
+
+这篇主要记录 Elasticsearch 这一部分，Neo4j 单独放到下一篇。
 
 > 📁 [项目源码](https://github.com/matianxing2201/agent_practice/tree/main/app/blueprints/rag/graph_rag)
 
-## 这次初始化了四样东西
+---
 
-| 层 | 弄了什么 | 放哪 |
-| --- | --- | --- |
-| 服务 | ES 8.19.21 + IK、Kibana | `~/Documents/software/elastic-neo4j/` |
-| 依赖 | elasticsearch-py 8.x | `requirements.txt` → `.venv` |
-| 配置 | `ES_HOST` / `ES_PORT`、`RAG_SCHEMES["graph_rag"]` | `config.py` |
-| 骨架 | controllers / services / es_store | `app/blueprints/rag/graph_rag/elasticsearch/` |
+## 一、先把环境跑起来
 
-服务那层特意放在 `~/Documents/software/` 下，跟之前的 `milvus` 同级，不挂在任何项目里。想法很简单：**服务怎么装不归项目管，项目只管怎么连**。Docker 起来一套，`agent_practice`、`big-model`、以后的项目连的都是它。
+这次把 Elasticsearch、Kibana、Neo4j 放到了同一个 Docker Compose 环境里。
 
-## 一、Elasticsearch + IK 服务
+目录目前是：
 
-### 为什么不直接 `docker run` 官方镜像
+```text
+~/Documents/software/elastic-neo4j/
+├── docker-compose.yml
+└── elasticsearch/
+    └── Dockerfile
+```
 
-官方 ES 镜像里没有中文分词器。不装 IK，中文检索基本等于没有，所以只能自己 build 一个把插件塞进去：
+其中 Elasticsearch 没直接使用官方镜像，而是在官方镜像的基础上额外装了 IK。
+
+版本统一使用：
+
+```text
+Elasticsearch 8.19.21
+IK              8.19.21
+Kibana          8.19.21
+```
+
+这里版本最好保持一致，尤其是 IK。
+
+---
+
+## 二、为什么要自己 build Elasticsearch
+
+官方 Elasticsearch 镜像本身没有 IK。
+
+如果主要做英文检索问题不大，但中文场景下，默认 analyzer 对中文的处理比较粗糙。
+
+比如：
+
+```text
+华为Mate80手机
+```
+
+如果不使用中文分词器，中文可能会被拆得比较碎，这对于后面的商品检索、知识库检索都不太友好。
+
+所以这里直接在官方镜像上安装 IK：
 
 ```dockerfile
 FROM docker.elastic.co/elasticsearch/elasticsearch:8.19.21
 
 ARG IK_VERSION=8.19.21
 
-RUN bin/elasticsearch-plugin install --batch "https://get.infini.cloud/elasticsearch/analysis-ik/${IK_VERSION}" \
+RUN bin/elasticsearch-plugin install --batch \
+    "https://get.infini.cloud/elasticsearch/analysis-ik/${IK_VERSION}" \
     && bin/elasticsearch-plugin list
 ```
 
-IK 现在归 INFINI Labs 维护，按 ES 的精确版本发（`analysis-ik/8.19.21`）。版本对不上插件直接加载失败、ES 起不来，所以 `FROM` 和 `ARG IK_VERSION` 这两处以后升级得一起改。
+IK 目前由 INFINI Labs 维护，插件版本跟 Elasticsearch 版本对应。
 
-目录就两个文件：
+所以以后升级 ES 的时候，这两个地方需要一起改：
 
-```text
-~/Documents/software/elastic-neo4j/
-├── docker-compose.yml                   # ES / Kibana / Neo4j
-└── elasticsearch/
-    └── Dockerfile                       # ES 8.19.21 + IK 8.19.21
+```dockerfile
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.19.21
+
+ARG IK_VERSION=8.19.21
 ```
 
-### compose 里的关键几行
+不要只升级其中一个。
+
+版本不匹配时，插件可能无法正常加载，最终表现就是 Elasticsearch 起不来。
+
+---
+
+## 三、Docker Compose
+
+这次 Elasticsearch 配置得比较简单，毕竟目前只是开发环境。
+
+核心配置：
 
 ```yaml
 services:
@@ -65,163 +110,520 @@ services:
       dockerfile: elasticsearch/Dockerfile
     image: es-ik:8.19.21
     container_name: es01
+
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
+
     ports:
       - "9200:9200"
+
     volumes:
       - esdata:/usr/share/elasticsearch/data
 ```
 
-- `discovery.type=single-node`：就一个节点，跳过集群选举，起步快
-- `xpack.security.enabled=false`：关掉认证直连，跟课程 demo 一样，代码里就不用带账号密码了
-- `ES_JAVA_OPTS=-Xms512m -Xmx512m`：堆锁死 512M，和 Milvus 一起跑不会把内存吃光
-- `volumes` 挂命名卷，容器重建数据不丢
+几个配置基本都是开发环境的常规选择。
 
-端口三个：9200 给 ES，5601 给 Kibana，7474 / 7687 是 Neo4j（这篇不用）。
+### `discovery.type=single-node`
 
-### 起服务
+现在就跑一个 ES 节点，不需要集群。
 
-```bash
-$ cd ~/Documents/software/elastic-neo4j
-$ docker compose up -d elasticsearch kibana
- Container es01 Starting
- Container es01 Started
- Container es01 Waiting
- Container es01 Healthy
- Container kib01 Starting
- Container kib01 Started
+否则 ES 会涉及节点发现、选主之类的配置，对于本地开发没有必要。
+
+### `xpack.security.enabled=false`
+
+本地环境直接关闭认证。
+
+这样代码里可以直接：
+
+```python
+Elasticsearch("http://127.0.0.1:9200")
 ```
 
-这次只起了 `elasticsearch` 和 `kibana` 两个服务，compose 里的 `neo4j` 没起。镜像之前已经 build 过，所以没带 `--build`；第一次或者改了 Dockerfile 才要 `docker compose up -d --build`。
+不用额外处理账号密码。
 
-起来以后：
+生产环境肯定不能这么干，这里只是为了降低本地开发成本。
+
+### `ES_JAVA_OPTS`
+
+```text
+-Xms512m -Xmx512m
+```
+
+给 ES 分 512MB 堆。
+
+主要是因为本地还要跑 Milvus、Neo4j、各种开发服务，不想让 Elasticsearch 一上来就把内存吃掉。
+
+### 数据卷
+
+```yaml
+volumes:
+  - esdata:/usr/share/elasticsearch/data
+```
+
+容器删掉重新创建以后，索引数据还在。
+
+---
+
+## 四、启动 Elasticsearch + Kibana
+
+这次没有直接启动 Neo4j，只先把 ES 和 Kibana 跑起来。
 
 ```bash
-$ docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'
+cd ~/Documents/software/elastic-neo4j
+
+docker compose up -d elasticsearch kibana
+```
+
+如果 Dockerfile 有修改，需要：
+
+```bash
+docker compose up -d --build elasticsearch kibana
+```
+
+这次镜像已经提前 build 过，所以没有加 `--build`。
+
+启动完成后：
+
+```bash
+docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}'
+```
+
+看到：
+
+```text
 NAMES     IMAGE                                     STATUS
 kib01     docker.elastic.co/kibana/kibana:8.19.21   Up (healthy)
 es01      es-ik:8.19.21                             Up (healthy)
 ```
 
-Docker Desktop 里看着是这样：
+就基本 OK 了。
+
+本地几个端口：
+
+```text
+9200   Elasticsearch
+5601   Kibana
+7474   Neo4j HTTP
+7687   Neo4j Bolt
+```
+
+这篇暂时只用 9200 和 5601。
 
 ![Docker Desktop 的 Containers 页](/images/rag/graph-rag-env-docker.png)
 
-Kibana 也一起起来了（5601）：
+Kibana：
 
 ![Kibana 首页](/images/rag/graph-rag-env-kibana.png)
 
-## 二、Python 依赖
+---
 
-`requirements.txt` 加一行：
+## 五、Python 客户端
+
+项目里增加 Elasticsearch Python 客户端：
 
 ```text
 elasticsearch>=8.19,<9
 ```
 
-（同一个提交里还有 `neo4j>=5.26,<6`，这篇不管。）
+然后重新安装：
 
 ```bash
-$ source .venv/bin/activate
-$ pip install -r requirements.txt
-$ pip show elasticsearch
+source .venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+检查一下：
+
+```bash
+pip show elasticsearch
+```
+
+目前安装的是：
+
+```text
 Name: elasticsearch
 Version: 8.19.3
 ```
 
-服务端 8.19.21，客户端 8.19.3，都是 8.x。约束卡 `<9` 是防止 pip 哪天装到 9.x 去——客户端跟服务端主版本对齐才省心。
+这里客户端是 8.19.3，服务端是 8.19.21。
 
-## 三、config.py
+虽然 patch 版本不完全一致，但都在 8.x，当前使用没有问题。
 
-`Config` 里加两个常量：
+这里加：
+
+```text
+<9
+```
+
+主要是不希望以后 `pip install -r requirements.txt` 的时候，客户端自动跨到 9.x。
+
+---
+
+## 六、配置
+
+`config.py` 目前先增加：
 
 ```python
 ES_HOST = "127.0.0.1"
 ES_PORT = "9200"
 ```
 
-`RAG_SCHEMES` 里加一个方案：
+然后给 `RAG_SCHEMES` 增加 Graph RAG 配置：
 
 ```python
 "graph_rag": {
-    "ES_INDEX": "goods_v1",   # ES 案例默认索引(含 IK 中文分词 mapping)
-    "ES_TOP_K": 5,            # ES 案例检索默认返回条数
+    "ES_INDEX": "goods_v1",
+    "ES_TOP_K": 5,
 },
 ```
 
-两处是特意这么写的：
+这里有个比较实际的问题：
 
-ES 关了认证，连接信息不是秘密，写成常量最省事；Neo4j 那边有密码，才走 `os.getenv` 兜底。**是不是敏感信息，决定配置怎么写。**
+**哪些东西应该放环境变量，哪些东西直接写配置？**
 
-索引名带 `_v1`，是因为 mapping 建好之后**已建字段的类型就改不了了**（加新字段可以，改类型不行）。结构要变只能新建 `goods_v2` 再 reindex 迁过去。带版本号，新旧索引能共存，迁移还能回滚。
+目前 ES 是本地开发环境，而且关闭了认证：
 
-## 四、代码骨架
+```text
+http://127.0.0.1:9200
+```
+
+没有账号密码，也没有真正的敏感信息，所以直接写配置问题不大。
+
+Neo4j 后面会涉及密码，这种就应该走：
+
+```python
+os.getenv(...)
+```
+
+简单来说：
+
+> 配置项不等于敏感信息，只有真正需要保护的东西才需要进环境变量。
+
+---
+
+## 七、为什么索引叫 `goods_v1`
+
+这里没有直接叫：
+
+```text
+goods
+```
+
+而是：
+
+```text
+goods_v1
+```
+
+主要考虑后面的 mapping 变更。
+
+ES 的 mapping 一旦建立，已经存在字段的类型不能随便改。
+
+比如：
+
+```json
+{
+  "price": {
+    "type": "float"
+  }
+}
+```
+
+以后如果发现应该改成：
+
+```text
+keyword
+```
+
+不能直接修改原字段类型。
+
+通常的处理方式是：
+
+```text
+goods_v1
+   ↓
+创建 goods_v2
+   ↓
+调整 mapping
+   ↓
+reindex
+   ↓
+验证
+   ↓
+切换索引
+```
+
+所以一开始带版本号，后面做 mapping 演进会舒服很多。
+
+目前只是 Demo，提前这样命名也算给后面留个口子。
+
+---
+
+## 八、代码结构先搭出来
+
+Graph RAG 下面暂时拆成 Elasticsearch 和 Neo4j 两部分：
 
 ```text
 app/blueprints/rag/graph_rag/
-├── __init__.py                      # 主题说明 + bp 注册(暂时注释)
-├── elasticsearch/                   # 案例① <- 这篇的范围
-│   ├── __init__.py                  # 学习目标 + 规划路由
-│   ├── controllers.py               # HTTP 路由,前缀 /rag/graph/es
-│   ├── services.py                  # 业务编排
-│   └── es_store.py                  # ES 客户端封装
-└── neo4j/                           # 案例② <- 另开一篇
+├── __init__.py
+│
+├── elasticsearch/
+│   ├── __init__.py
+│   ├── controllers.py
+│   ├── services.py
+│   └── es_store.py
+│
+└── neo4j/
     ├── __init__.py
     ├── controllers.py
     ├── services.py
     └── neo4j_store.py
 ```
 
-三层各管一段，依赖是单向的 `controllers → services → es_store`：
+这一层暂时不追求复杂架构，主要是把职责先分开。
 
-- `controllers.py` 只管 HTTP，收请求、校验参数、返 JSON，不知道 ES 怎么连
-- `services.py` 管编排，把「建索引 / 写数据 / 检索」串成步骤，不碰 HTTP
-- `es_store.py` 只管跟 Elasticsearch 打交道，不知道有 Flask
+目前约定：
 
-现在这 9 个文件全是 docstring，没有一行能跑的代码。每个文件里写了它负责什么、待实现哪些方法，先把结构和边界定下来，实现留着后面填。
+```text
+controllers
+      ↓
+services
+      ↓
+es_store
+```
 
-规划中的路由（也抄在 `elasticsearch/__init__.py` 里了）：
+### controllers
 
-- `GET /rag/graph/es/status` — 连通性 + 集群信息（demo_1）
-- `POST /rag/graph/es/analyze` — IK 分词对比
-- `POST /rag/graph/es/indexes` — 建索引（demo_2）
-- `DELETE /rag/graph/es/indexes/<index_name>` — 删索引（demo_5）
-- `POST /rag/graph/es/indexes/<index_name>/docs` — 单条 / bulk 写入（demo_3、demo_4）
-- `POST /rag/graph/es/indexes/<index_name>/search` — 查询（demo_6、demo_7、demo_9、demo_10）
+处理 HTTP：
 
-还有一处故意留空：`graph_rag/__init__.py` 末尾往 rag 蓝图注册的两行，现在是注释状态。案例没写完就 import，只会挂两个空 controllers 上去，什么路由都没有。等案例写完再放开。
+- 接收参数
+- 参数校验
+- 调 service
+- 返回 JSON
 
-## 五、验收，自己跑了一遍
+不关心 ES 怎么连接。
 
-### 1. 版本和 IK 插件
+### services
+
+处理业务流程。
+
+比如：
+
+```text
+创建索引
+    ↓
+准备 mapping
+    ↓
+调用 store
+    ↓
+返回结果
+```
+
+这里不处理 HTTP 细节。
+
+### es_store
+
+只负责 Elasticsearch。
+
+例如：
+
+```text
+create_index()
+delete_index()
+bulk_insert()
+search()
+analyze()
+```
+
+这样以后如果 ES 客户端初始化方式变了，主要改这一层就可以。
+
+---
+
+## 九、路由先规划好
+
+目前 Elasticsearch 这一块准备做这些 Demo：
+
+```text
+GET
+/rag/graph/es/status
+```
+
+查看 Elasticsearch 连通性和版本信息。
+
+---
+
+```text
+POST
+/rag/graph/es/analyze
+```
+
+测试 IK 分词。
+
+---
+
+```text
+POST
+/rag/graph/es/indexes
+```
+
+创建索引。
+
+---
+
+```text
+DELETE
+/rag/graph/es/indexes/<index_name>
+```
+
+删除索引。
+
+---
+
+```text
+POST
+/rag/graph/es/indexes/<index_name>/docs
+```
+
+写入数据。
+
+后面会同时覆盖单条写入和 bulk。
+
+---
+
+```text
+POST
+/rag/graph/es/indexes/<index_name>/search
+```
+
+查询。
+
+后面会逐步把：
+
+```text
+match
+term
+bool
+filter
+highlight
+```
+
+以及后面的混合检索都放进来。
+
+---
+
+目前这几个 Demo 对应到：
+
+```text
+demo_1  status
+demo_2  create index
+demo_3  insert
+demo_4  bulk
+demo_5  delete
+demo_6  search
+...
+```
+
+具体实现下一篇再继续。
+
+---
+
+## 十、Graph RAG 蓝图暂时没有注册
+
+这里我刻意没有马上把 Elasticsearch 和 Neo4j 注册到上层 Blueprint。
+
+现在：
+
+```python
+# register_blueprint(...)
+# register_blueprint(...)
+```
+
+先保持注释。
+
+原因很简单：
+
+现在代码只是骨架。
+
+如果现在就 import：
+
+```text
+graph_rag
+    ↓
+elasticsearch
+    ↓
+controllers
+```
+
+虽然不会有什么实际功能，但整个模块已经会进入应用启动流程。
+
+目前案例还没写完，没有必要这么早接进去。
+
+等 Elasticsearch Demo 和 Neo4j Demo 都完成以后，再统一注册。
+
+---
+
+## 十一、先做一轮环境验收
+
+环境搭完以后，最好不要直接开始写业务。
+
+先把几个最基础的东西验证一下。
+
+## 1. Elasticsearch 版本
 
 ```bash
-$ curl -s http://127.0.0.1:9200 | python3 -m json.tool
+curl -s http://127.0.0.1:9200 | python3 -m json.tool
+```
+
+返回：
+
+```json
 {
-    "name": "e0f2e15cfcc9",
-    "cluster_name": "docker-cluster",
-    "version": {
-        "number": "8.19.21",
-        "build_flavor": "default",
-        "lucene_version": "9.12.2",
-        ...
-    },
-    "tagline": "You Know, for Search"
+  "name": "e0f2e15cfcc9",
+  "cluster_name": "docker-cluster",
+  "version": {
+    "number": "8.19.21",
+    "build_flavor": "default",
+    "lucene_version": "9.12.2"
+  },
+  "tagline": "You Know, for Search"
 }
 ```
 
+先确认 ES 本身能正常访问。
+
+---
+
+## 2. 确认 IK 到底有没有装
+
+这个比看 Docker 容器状态更直接：
+
 ```bash
-$ curl -s "http://127.0.0.1:9200/_cat/plugins?v"
+curl -s "http://127.0.0.1:9200/_cat/plugins?v"
+```
+
+结果：
+
+```text
 name         component   version
 e0f2e15cfcc9 analysis-ik 8.19.21
 ```
 
-第二条是关键：IK 装没装上，一眼就能看出来。没它，后面 `match: {"title": "手机"}` 一个字都搜不出来。
+看到：
 
-### 2. Python 驱动连一下
+```text
+analysis-ik
+```
+
+基本就可以确定插件已经加载。
+
+---
+
+## 十二、Python 客户端测试
+
+简单写个 `verify.py`：
 
 ```python
 from elasticsearch import Elasticsearch
@@ -236,49 +638,304 @@ print("ping ->", es.ping())
 print("version ->", es.info()["version"]["number"])
 ```
 
+执行：
+
 ```bash
-$ python verify.py
+python verify.py
+```
+
+结果：
+
+```text
 ping -> True
 version -> 8.19.21
 ```
 
-这里踩了个坑，记一下：ES 没起来的时候，`es.ping()` 是**返回 `False`，不抛异常**——8.x 客户端内部把 `TransportError` 吞了；但同一个地址 `es.info()` 会直接抛 `elastic_transport.ConnectionError`。我第一遍先 ping 了一下看到 False，差点回去改 hosts。所以 `ping()` 适合做健康检查的布尔判断，想拿到失败原因必须换 `info()`。
+说明 Python 客户端也没问题。
 
-还有一个小的：容器报 `healthy` 之后，HTTP 端口还要等几秒才真能接上。第一发 `curl` 直接 `Connection reset by peer`（exit 56），重试第三次才通。不是配置错了，就是还没起完。
+---
 
-### 3. IK 分词对比，这个最有意思
+## 这里碰到一个小坑
 
-```bash
-$ curl -s -X POST "http://127.0.0.1:9200/_analyze" \
-    -H 'Content-Type: application/json' \
-    -d '{"analyzer":"ik_max_word","text":"华为Mate80手机"}'
+ES 没启动的时候：
+
+```python
+es.ping()
 ```
 
-同一个句子，三个分词器切出来完全不一样：
+返回的是：
 
-| 分词器 | 切出来的词 |
-| --- | --- |
+```text
+False
+```
+
+而不是直接把连接异常抛出来。
+
+但：
+
+```python
+es.info()
+```
+
+会直接抛连接异常。
+
+所以如果只是做健康检查：
+
+```python
+es.ping()
+```
+
+很好用。
+
+如果需要知道**为什么连不上**，还是得捕获具体异常，或者调用 `info()`。
+
+这个区别第一次写的时候挺容易踩。
+
+---
+
+## 另外一个启动时序问题
+
+Docker 显示：
+
+```text
+Up (healthy)
+```
+
+也不一定意味着马上就能稳定访问 HTTP。
+
+我第一次启动的时候，容器已经显示 healthy，但第一发：
+
+```bash
+curl http://127.0.0.1:9200
+```
+
+还是遇到了：
+
+```text
+Connection reset by peer
+```
+
+重试几次后正常。
+
+所以如果刚启动 ES，建议等几秒再测。
+
+这种一般不是配置问题，而是 Elasticsearch 自己还在初始化。
+
+---
+
+## 十三、IK 分词测试
+
+环境确认没问题以后，直接测试一下 IK。
+
+```bash
+curl -s -X POST "http://127.0.0.1:9200/_analyze" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "analyzer": "ik_max_word",
+    "text": "华为Mate80手机"
+  }'
+```
+
+几个 analyzer 的结果大概是：
+
+| Analyzer      | 结果                                       |
+| ------------- | ------------------------------------------ |
 | `ik_max_word` | 华为 / mate80 / mate / 80 / 手机 / 手 / 机 |
-| `ik_smart` | 华为 / mate80 / 手机 |
-| `standard` | 华 / 为 / mate80 / 手 / 机 |
+| `ik_smart`    | 华为 / mate80 / 手机                       |
+| `standard`    | 华 / 为 / mate80 / 手 / 机                 |
 
-- `ik_max_word` 切得最细，还会重叠（「手机」既是「手机」也是「手」+「机」），适合**写索引**的时候用，召回率高
-- `ik_smart` 只切一遍不重叠，适合**查询**的时候用
-- `standard` 把中文全切成单字——这就是不装 IK 时中文检索废掉的原因：搜「手机」变成搜「手」和「机」
+这几个的区别比较直观。
 
-顺带记一条：`_analyze` 用 `GET` 带 query 参数会报 `request body or source parameter is required`（400），老老实实 `POST` + `-d` 最省事。
+### `ik_max_word`
 
-## 还剩什么
+分得比较细。
 
-- ES 案例还没写：demo_1 ~ demo_11 要填进 `es_store` / `services` / `controllers`
-- 写完记得把 `graph_rag/__init__.py` 里注册蓝图的两行放开
-- Neo4j：子包和 `NEO4J_*` 配置都就位了，还没动，另开一篇
-- 再往后才是 Graph RAG 主体：实体抽取 → 建图 → 图检索和向量检索配合
+例如：
 
-## 小结
+```text
+手机
+↓
+手机
+手
+机
+```
 
-- 服务独立装：`~/Documents/software/elastic-neo4j/`，与 `milvus` 同级，多个项目共用一套 Docker
-- 版本要三同步：ES 8.19.21 = IK 8.19.21 = Kibana 8.19.21，升级必须一起改；客户端锁 `>=8.19,<9`
-- 关认证直连（`xpack.security.enabled=false`），省掉代码里的账号密码
-- `ping()` 连不上返回 `False` 不抛异常，要原因用 `info()`
-- 结构先定、实现后填：9 个文件先按三层分好，只有 docstring
+会产生更多 token。
+
+所以通常更适合**索引阶段**，尽可能提高召回。
+
+### `ik_smart`
+
+相对更粗一些：
+
+```text
+华为 / mate80 / 手机
+```
+
+通常更适合查询阶段。
+
+### `standard`
+
+中文基本会被拆得比较碎。
+
+这也是为什么中文搜索场景通常不会直接使用默认的 standard analyzer。
+
+---
+
+## 十四、`_analyze` 还有一个小坑
+
+测试 `_analyze` 的时候，直接：
+
+```text
+GET /_analyze
+```
+
+然后把参数拼在 URL 里，很容易得到：
+
+```text
+request body or source parameter is required
+```
+
+直接用：
+
+```text
+POST
+```
+
+然后把 analyzer 和 text 放到 JSON body 里最省事。
+
+也就是：
+
+```bash
+POST /_analyze
+Content-Type: application/json
+```
+
+```json
+{
+  "analyzer": "ik_max_word",
+  "text": "华为Mate80手机"
+}
+```
+
+---
+
+## 十五、目前做到这里
+
+到这里，Graph RAG 的第一块基础设施算是搭完了。
+
+当前状态：
+
+```text
+                    Graph RAG
+                       │
+              ┌────────┴────────┐
+              │                 │
+       Elasticsearch          Neo4j
+              │                 │
+          IK 中文分词          待实现
+              │
+        当前进行中
+```
+
+再往后才是真正的 Graph RAG：
+
+```text
+文档
+ ↓
+切分
+ ↓
+实体 / 关系抽取
+ ↓
+Neo4j 建图
+ ↓
+Elasticsearch 关键词检索
+ +
+向量检索
+ +
+图检索
+ ↓
+结果融合
+ ↓
+LLM
+```
+
+---
+
+## 十六、小结
+
+目前确定了几件事情：
+
+**1. Elasticsearch 和 Milvus 各自负责不同类型的检索**
+
+Milvus 更偏语义相似度。
+
+Elasticsearch 更适合：
+
+```text
+关键词
+全文
+Filter
+Highlight
+中文分词
+```
+
+后面的 Graph RAG 不会简单变成“Neo4j 替代 Milvus”，而更可能是几种检索方式组合起来。
+
+**2. IK 要跟 ES 版本一起升级**
+
+现在是：
+
+```text
+ES 8.19.21
+IK 8.19.21
+Kibana 8.19.21
+```
+
+升级的时候一起改。
+
+**3. Index 从一开始就带版本号**
+
+```text
+goods_v1
+```
+
+后面 mapping 发生变化时，可以：
+
+```text
+goods_v1 → goods_v2 → reindex → 切换
+```
+
+不用直接动线上索引结构。
+
+**4. 本地开发先把认证关掉**
+
+当前是：
+
+```text
+xpack.security.enabled=false
+```
+
+方便开发。
+
+生产环境再处理认证、TLS、权限这些问题。
+
+**5. 代码先把边界划出来**
+
+```text
+Controller
+    ↓
+Service
+    ↓
+Store
+    ↓
+Elasticsearch
+```
+
+现在这些文件基本还是 docstring，没急着往里面塞代码。
+
+下一步就是开始真正实现 Elasticsearch 的几个 Demo，把从建 Index、Mapping、写入、Bulk 到 Query 的完整流程走一遍。
+
+然后再进入 Neo4j。
+
+最后才是把 **ES + Milvus + Neo4j** 真正组合成 Graph RAG。
