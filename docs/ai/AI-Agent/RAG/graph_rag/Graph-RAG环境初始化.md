@@ -1,5 +1,5 @@
 ---
-date: 2026-09-10
+date: 2026-09-11
 title: Graph RAG 环境初始化
 tags:
   - AI
@@ -27,7 +27,9 @@ tags:
 
 ---
 
-## 一、先把环境跑起来
+## 一、环境搭建
+
+### 先把环境跑起来
 
 这次把 Elasticsearch、Kibana、Neo4j 放到了同一个 Docker Compose 环境里。
 
@@ -54,7 +56,7 @@ Kibana          8.19.21
 
 ---
 
-## 二、为什么要自己 build Elasticsearch
+### 为什么要自己 build Elasticsearch
 
 官方 Elasticsearch 镜像本身没有 IK。
 
@@ -96,7 +98,7 @@ ARG IK_VERSION=8.19.21
 
 ---
 
-## 三、Docker Compose
+### Docker Compose
 
 这次 Elasticsearch 配置得比较简单，毕竟目前只是开发环境。
 
@@ -125,13 +127,15 @@ services:
 
 几个配置基本都是开发环境的常规选择。
 
-### `discovery.type=single-node`
+#### `discovery.type=single-node`
 
 现在就跑一个 ES 节点，不需要集群。
 
 否则 ES 会涉及节点发现、选主之类的配置，对于本地开发没有必要。
 
-### `xpack.security.enabled=false`
+---
+
+#### `xpack.security.enabled=false`
 
 本地环境直接关闭认证。
 
@@ -145,7 +149,9 @@ Elasticsearch("http://127.0.0.1:9200")
 
 生产环境肯定不能这么干，这里只是为了降低本地开发成本。
 
-### `ES_JAVA_OPTS`
+---
+
+#### `ES_JAVA_OPTS`
 
 ```text
 -Xms512m -Xmx512m
@@ -155,7 +161,9 @@ Elasticsearch("http://127.0.0.1:9200")
 
 主要是因为本地还要跑 Milvus、Neo4j、各种开发服务，不想让 Elasticsearch 一上来就把内存吃掉。
 
-### 数据卷
+---
+
+#### 数据卷
 
 ```yaml
 volumes:
@@ -166,7 +174,7 @@ volumes:
 
 ---
 
-## 四、启动 Elasticsearch + Kibana
+### 启动 Elasticsearch + Kibana
 
 这次没有直接启动 Neo4j，只先把 ES 和 Kibana 跑起来。
 
@@ -219,7 +227,9 @@ Kibana：
 
 ---
 
-## 五、Python 客户端
+## 二、客户端与配置
+
+### Python 客户端
 
 项目里增加 Elasticsearch Python 客户端：
 
@@ -262,7 +272,7 @@ Version: 8.19.3
 
 ---
 
-## 六、配置
+### 配置
 
 `config.py` 目前先增加：
 
@@ -304,7 +314,7 @@ os.getenv(...)
 
 ---
 
-## 七、为什么索引叫 `goods_v1`
+### 为什么索引叫 `goods_v1`
 
 这里没有直接叫：
 
@@ -362,7 +372,9 @@ reindex
 
 ---
 
-## 八、代码结构先搭出来
+## 三、代码骨架与路由
+
+### 代码结构先搭出来
 
 Graph RAG 下面暂时拆成 Elasticsearch 和 Neo4j 两部分：
 
@@ -395,7 +407,7 @@ services
 es_store
 ```
 
-### controllers
+#### controllers
 
 处理 HTTP：
 
@@ -406,7 +418,9 @@ es_store
 
 不关心 ES 怎么连接。
 
-### services
+---
+
+#### services
 
 处理业务流程。
 
@@ -424,7 +438,9 @@ es_store
 
 这里不处理 HTTP 细节。
 
-### es_store
+---
+
+#### es_store
 
 只负责 Elasticsearch。
 
@@ -442,7 +458,7 @@ analyze()
 
 ---
 
-## 九、路由先规划好
+### 路由先规划好
 
 目前 Elasticsearch 这一块准备做这些 Demo：
 
@@ -512,25 +528,11 @@ highlight
 
 以及后面的混合检索都放进来。
 
----
-
-目前这几个 Demo 对应到：
-
-```text
-demo_1  status
-demo_2  create index
-demo_3  insert
-demo_4  bulk
-demo_5  delete
-demo_6  search
-...
-```
-
 具体实现下一篇再继续。
 
 ---
 
-## 十、Graph RAG 蓝图暂时没有注册
+### Graph RAG 蓝图暂时没有注册
 
 这里我刻意没有马上把 Elasticsearch 和 Neo4j 注册到上层 Blueprint。
 
@@ -565,13 +567,15 @@ controllers
 
 ---
 
-## 十一、先做一轮环境验收
+## 四、环境验收
+
+### 先做一轮环境验收
 
 环境搭完以后，最好不要直接开始写业务。
 
 先把几个最基础的东西验证一下。
 
-### 1. Elasticsearch 版本
+#### 1. Elasticsearch 版本
 
 ```bash
 curl -s http://127.0.0.1:9200 | python3 -m json.tool
@@ -596,7 +600,7 @@ curl -s http://127.0.0.1:9200 | python3 -m json.tool
 
 ---
 
-### 2. 确认 IK 到底有没有装
+#### 2. 确认 IK 到底有没有装
 
 这个比看 Docker 容器状态更直接：
 
@@ -621,7 +625,7 @@ analysis-ik
 
 ---
 
-## 十二、Python 客户端测试
+### Python 客户端测试
 
 简单写个 `verify.py`：
 
@@ -653,9 +657,7 @@ version -> 8.19.21
 
 说明 Python 客户端也没问题。
 
----
-
-### 这里碰到一个小坑
+#### 这里碰到一个小坑
 
 ES 没启动的时候：
 
@@ -693,7 +695,7 @@ es.ping()
 
 ---
 
-### 另外一个启动时序问题
+#### 另外一个启动时序问题
 
 Docker 显示：
 
@@ -723,7 +725,7 @@ Connection reset by peer
 
 ---
 
-## 十三、IK 分词测试
+### IK 分词测试
 
 环境确认没问题以后，直接测试一下 IK。
 
@@ -746,7 +748,7 @@ curl -s -X POST "http://127.0.0.1:9200/_analyze" \
 
 这几个的区别比较直观。
 
-### `ik_max_word`
+#### `ik_max_word`
 
 分得比较细。
 
@@ -764,7 +766,9 @@ curl -s -X POST "http://127.0.0.1:9200/_analyze" \
 
 所以通常更适合**索引阶段**，尽可能提高召回。
 
-### `ik_smart`
+---
+
+#### `ik_smart`
 
 相对更粗一些：
 
@@ -774,7 +778,9 @@ curl -s -X POST "http://127.0.0.1:9200/_analyze" \
 
 通常更适合查询阶段。
 
-### `standard`
+---
+
+#### `standard`
 
 中文基本会被拆得比较碎。
 
@@ -782,7 +788,7 @@ curl -s -X POST "http://127.0.0.1:9200/_analyze" \
 
 ---
 
-## 十四、`_analyze` 还有一个小坑
+### `_analyze` 还有一个小坑
 
 测试 `_analyze` 的时候，直接：
 
@@ -820,7 +826,9 @@ Content-Type: application/json
 
 ---
 
-## 十五、目前做到这里
+## 五、当前进度与小结
+
+### 目前的进展
 
 到这里，Graph RAG 的第一块基础设施算是搭完了。
 
@@ -862,7 +870,7 @@ LLM
 
 ---
 
-## 十六、小结
+### 小结
 
 目前确定了几件事情：
 
@@ -931,8 +939,6 @@ Store
     ↓
 Elasticsearch
 ```
-
-现在这些文件基本还是 docstring，没急着往里面塞代码。
 
 下一步就是开始真正实现 Elasticsearch 的几个 Demo，把从建 Index、Mapping、写入、Bulk 到 Query 的完整流程走一遍。
 
