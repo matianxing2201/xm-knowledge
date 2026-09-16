@@ -1037,3 +1037,302 @@ curl -X DELETE \
 > **删除 Index 不只是删除 mapping，里面的数据也一起没了。**
 
 所以生产环境删 Index 之前一定要确认。
+
+---
+
+## 四、写入文档
+
+接口：
+
+```text
+POST /rag/graph/es/indexes/<index_name>/docs
+```
+
+这个接口的 body 有两种形态：
+
+```text
+传对象
+    ↓
+写单条
+
+传数组
+    ↓
+走 bulk 批量
+```
+
+---
+
+### 写单条
+
+body 传一个对象，走单条写入接口：
+
+![写单条](/images/rag/elasticsearch-insert-1.png)
+
+返回：
+
+```json
+{
+  "count": 1,
+  "ids": ["1001"],
+  "index": "goods_v1",
+  "mode": "single"
+}
+```
+
+返回里三个字段：
+
+```text
+count   这次写进去几条
+ids     实际用的 _id
+mode    走的哪条路(single / bulk)
+```
+
+看下 `1001` 落库后的效果：
+
+![写单条返回](/images/rag/elasticsearch-insert-2.png)
+
+---
+
+### `_id` 是如何定义的
+
+```text
+doc 里有 goods_id
+    ↓
+拿它当 _id
+
+doc 里没有 goods_id
+    ↓
+传 None,让 ES 自己生成
+```
+
+实测一下不带 `goods_id`：
+
+```json
+{
+  "count": 1,
+  "ids": ["1HPSp6ABvXex7LI9ErSe"],
+  "index": "goods_v1",
+  "mode": "single"
+}
+```
+
+ES 生成的是一串随机字符串。
+
+这里的 `_id` 就相当于 MySQL 里的主键。之所以拿 `goods_id` 当 `_id`，是因为商品 ID 本身唯一，用它当主键之后，后面按 id 查询、修改、删除都能对得上。
+
+---
+
+### 同一个 `_id` 再写一次会怎样
+
+`1001` 原本是完整的：
+
+```json
+{
+  "goods_id": "1001",
+  "title": "Huawei Mate 80 手机",
+  "desc": "HUAWEI Mate 80是华为公司于2025年11月25日发布的智能手机系列...",
+  "category": "mobile_phone",
+  "price": 7999
+}
+```
+
+```text
+_version: 1
+```
+
+然后我只带了 `goods_id` 和 `title` 再写一次：
+
+再看 `1001`：
+
+```json
+{
+  "goods_id": "1001",
+  "title": "Huawei Mate 80 手机"
+}
+```
+
+```text
+_version: 2
+```
+
+`desc`、`category`、`price` 全没了。
+
+原因在这里：
+
+> **同一个 `_id` 再写，是整体替换，不是局部更新。**
+
+ES 看到 `_id` 已经存在，不会新增一条，而是把原来那条全部换掉。没带的字段就真的没了。
+
+这个很容易踩：想只改个价格，就只传了 `price`，回头发现 `title` 也一起消失了。
+
+要改单个字段，得用后面的：
+
+```text
+PUT /rag/graph/es/indexes/<index_name>/docs/<doc_id>
+```
+
+那个走的才是局部更新。
+
+---
+
+### bulk 批量写入
+
+body 换成数组就是 bulk：
+
+![bulk 批量写入](/images/rag/elasticsearch-insert-3.png)
+
+返回：
+
+```json
+{
+  "count": 2,
+  "errors": [],
+  "failed": 0,
+  "index": "goods_v1",
+  "mode": "bulk"
+}
+```
+
+`mode` 变成了 `bulk`，并且多了 `failed` 和 `errors` 两个字段。
+
+代码里 bulk 是这样拼的：
+
+```python
+def _actions():
+    for doc in docs:
+        action = {
+            "_index": self.index_name,
+            "_source": doc,
+        }
+        doc_id = doc.get(ID_FIELD)
+        if doc_id is not None:
+            action["_id"] = str(doc_id)
+        yield action
+
+success, errors = bulk(
+    self.client,
+    _actions(),
+    raise_on_error=False,
+)
+```
+
+为什么不用 for 循环一条条调单条接口：
+
+```text
+单条写入 N 次
+    ↓
+N 次 HTTP 往返
+
+bulk 一次
+    ↓
+1 次 HTTP 往返
+```
+
+1000 条数据就是 1000 次请求和 1 次请求的差别。
+
+```text
+批量操作使用 bulk，不要使用单条循环操作
+```
+
+---
+
+### bulk 里的部分失败
+
+bulk 有个要特别注意的地方：**它允许一部分成功、一部分失败。**
+
+实测两条，其中一条 `price` 写成字符串：
+
+```json
+[
+  {
+    "goods_id": "1003",
+    "title": "正常商品",
+    "category": "mobile_phone",
+    "price": 1999
+  },
+  {
+    "goods_id": "1004",
+    "title": "价格非法的商品",
+    "category": "mobile_phone",
+    "price": "不是数字"
+  }
+]
+```
+
+返回：
+
+```json
+{
+  "count": 1,
+  "errors": [
+    {
+      "index": {
+        "_id": "1004",
+        "_index": "goods_v1",
+        "error": {
+          "type": "document_parsing_exception",
+          "reason": "[1:86] failed to parse field [price] of type [double] in document with id '1004'. Preview of field's value: '不是数字'",
+          "caused_by": {
+            "type": "number_format_exception",
+            "reason": "For input string: \"不是数字\""
+          }
+        },
+        "status": 400
+      }
+    }
+  ],
+  "failed": 1,
+  "index": "goods_v1",
+  "mode": "bulk"
+}
+```
+
+`1003` 写进去了，`1004` 没有，失败原因在 `errors` 里写得很清楚。
+
+所以调 bulk 的时候一定要看 `failed`：
+
+```text
+failed > 0
+    ↓
+有文档没写进去
+```
+
+接口里 `errors` 只回前 3 条：
+
+```python
+"errors": errors[:3],
+```
+
+批量失败几万条的时候不至于把响应刷爆。
+
+顺便，这个失败也顺带说明了一件事：`price` 的 mapping 是 `double`，传字符串 ES 直接拒了。**类型不对在写入阶段就会被拦下来**，这也是自己写 mapping 的好处之一，不会等到检索的时候才发现数据脏了。
+
+---
+
+### body 不合法的情况
+
+空数组：
+
+```json
+{
+  "error": "文档不能为空，且每条都必须是对象"
+}
+```
+
+```text
+400
+```
+
+body 传字符串：
+
+```json
+{
+  "error": "body 要传一个文档对象，或文档对象数组"
+}
+```
+
+```text
+400
+```
+
+---
