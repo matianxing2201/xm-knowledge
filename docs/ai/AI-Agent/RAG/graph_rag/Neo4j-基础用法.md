@@ -66,10 +66,6 @@ GraphDatabase.driver(
 
 ---
 
-### 为什么也拆成三层
-
-和 Elasticsearch 一样，Neo4j 这侧也保持：
-
 ```text
 controllers
       ↓
@@ -79,8 +75,6 @@ neo4j_store
 ```
 
 `controllers` 只处理 HTTP 和参数校验，`services` 负责拼 Cypher 和业务编排，`neo4j_store` 只封装连接和一个通用的 `run_cypher()`。
-
-这样以后如果换连接方式、换 driver 版本，只动最下面一层。
 
 ---
 
@@ -110,8 +104,6 @@ class Neo4jStore:
             res: Result = sess.run(cypher, params)
             return [dict(rec) for rec in res]
 ```
-
-有两个点值得单独记。
 
 ---
 
@@ -265,7 +257,7 @@ curl -X POST http://127.0.0.1:5001/rag/graph/neo4j/demo/person \
 # 再调一次,返回的 element_id 变了
 ```
 
-如果你不希望重复，用下一节的 `MERGE`。
+如果不希望重复，用 `MERGE`。
 
 ---
 
@@ -760,8 +752,6 @@ DETACH DELETE
 
 ## 九、小结
 
-一篇里我们把「建图 → 查图 → 改图 → 删图」走了一遍。
-
 | 操作     | Cypher 关键词                    | 幂等 | 备注                     |
 | -------- | -------------------------------- | ---- | ------------------------ |
 | 创建节点 | `CREATE`                         | 否   | 重复调会出现多个同名节点 |
@@ -772,9 +762,9 @@ DETACH DELETE
 | 更新节点 | `SET`                            | -    | 按需拼 SET 字段          |
 | 删除节点 | `DETACH DELETE`                  | -    | 连节点的关系一起删       |
 
-几个容易踩的点再强调一遍：
+几个容易踩的点：
 
 1. **`rec.data()` vs `dict(rec)`**：要用 `element_id` 这种图对象属性，必须 `dict(rec)`。
-2. **`CREATE` 不幂等，`MERGE` 幂等**：脚本播种用 `MERGE`，避免重复节点。
+2. **`CREATE` 不幂等，`MERGE` 幂等**：使用 `MERGE`，避免重复节点。
 3. **`DETACH`**：删还有关系的节点必须 detach，否则报错。
 4. **参数化**：值走 `params`，别拼进 Cypher 字符串。
