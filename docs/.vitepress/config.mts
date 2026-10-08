@@ -474,6 +474,10 @@ const config = withMermaid(
                           text: "Elasticsearch 基础用法",
                           link: "/ai/AI-Agent/RAG/graph_rag/Elasticsearch-基础用法",
                         },
+                        {
+                          text: "Neo4j 基础用法",
+                          link: "/ai/AI-Agent/RAG/graph_rag/Neo4j-基础用法",
+                        },
                       ],
                     },
                   ],
