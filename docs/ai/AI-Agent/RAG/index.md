@@ -28,4 +28,6 @@ RAG（Retrieval-Augmented Generation）是一种将检索与生成相结合的�
       href: /xm-knowledge/ai/AI-Agent/RAG/graph_rag/Graph-RAG环境初始化
     - name: Elasticsearch 基础用法
       href: /xm-knowledge/ai/AI-Agent/RAG/graph_rag/Elasticsearch-基础用法
-```
+    - name: Neo4j 基础用法
+      href: /xm-knowledge/ai/AI-Agent/RAG/graph_rag/Neo4j-基础用法
+-``````
