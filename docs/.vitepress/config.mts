@@ -478,6 +478,10 @@ const config = withMermaid(
                           text: "Neo4j 基础用法",
                           link: "/ai/AI-Agent/RAG/graph_rag/Neo4j-基础用法",
                         },
+                        {
+                          text: "Neo4j 中药方剂图谱实战",
+                          link: "/ai/AI-Agent/RAG/graph_rag/Neo4j-中药方剂图谱实战",
+                        },
                       ],
                     },
                   ],
