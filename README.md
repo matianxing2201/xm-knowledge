@@ -56,6 +56,9 @@ xm-knowledge/
 │   │   ├── AI-Agent/                 # AI Agent 开发笔记
 │   │   ├── SpringAI/                 # Spring AI 笔记
 │   │   └── LangChain/                # LangChain 笔记
+│   ├── app/                          # 移动应用开发笔记（Flutter 项目）
+│   │   ├── index.md
+│   │   └── 上架发布/                  # iOS / Android 应用上架
 │   ├── java/                         # Java 学习笔记
 │   ├── go/                           # Go 学习笔记
 │   ├── web/                          # 前端学习笔记

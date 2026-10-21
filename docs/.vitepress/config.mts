@@ -108,6 +108,7 @@ const config = withMermaid(
             ],
           },
           { text: "Go", link: "/go/" },
+          { text: "App 开发", link: "/app/" },
           { text: "标签", link: "/tags.html" },
           { text: "归档", link: "/archive.html" },
         ],
@@ -519,6 +520,29 @@ const config = withMermaid(
               link: "/ai/LangChain/",
               collapsed: true,
               items: [],
+            },
+          ],
+          "/app/": [
+            {
+              text: "App 开发",
+              items: [
+                { text: "概览", link: "/app/" },
+                {
+                  text: "上架发布",
+                  collapsed: false,
+                  items: [
+                    { text: "目录", link: "/app/上架发布/" },
+                    {
+                      text: "iOS 应用上架",
+                      link: "/app/上架发布/iOS-应用上架",
+                    },
+                    {
+                      text: "Android 应用上架",
+                      link: "/app/上架发布/Android-应用上架",
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
