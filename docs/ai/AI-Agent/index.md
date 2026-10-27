@@ -30,6 +30,8 @@ title: AI Agent
   children:
     - name: Ollama 环境安装
       href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-环境安装
+    - name: 配置与客户端
+      href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-配置与客户端
     - name: 基础对话与参数配置
       href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-基础对话与参数配置
 - name: 7种RAG方案

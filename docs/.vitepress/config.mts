@@ -446,6 +446,10 @@ const config = withMermaid(
                       link: "/ai/AI-Agent/Ollama/Ollama-环境安装",
                     },
                     {
+                      text: "配置与客户端",
+                      link: "/ai/AI-Agent/Ollama/Ollama-配置与客户端",
+                    },
+                    {
                       text: "基础对话与参数配置",
                       link: "/ai/AI-Agent/Ollama/Ollama-基础对话与参数配置",
                     },
