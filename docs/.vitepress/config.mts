@@ -453,6 +453,10 @@ const config = withMermaid(
                       text: "基础对话与参数配置",
                       link: "/ai/AI-Agent/Ollama/Ollama-基础对话与参数配置",
                     },
+                    {
+                      text: "多轮对话与补全",
+                      link: "/ai/AI-Agent/Ollama/Ollama-多轮对话chat与补全generate",
+                    },
                   ],
                 },
                 {

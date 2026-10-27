@@ -34,6 +34,8 @@ title: AI Agent
       href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-配置与客户端
     - name: 基础对话与参数配置
       href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-基础对话与参数配置
+    - name: 多轮对话与补全
+      href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-多轮对话chat与补全generate
 - name: 7种RAG方案
   href: /xm-knowledge/ai/AI-Agent/RAG/index
   open: true
