@@ -461,6 +461,10 @@ const config = withMermaid(
                       text: "SDK 常用方法",
                       link: "/ai/AI-Agent/Ollama/Ollama-SDK常用方法",
                     },
+                    {
+                      text: "自定义模型 Modelfile",
+                      link: "/ai/AI-Agent/Ollama/Ollama-自定义模型Modelfile",
+                    },
                   ],
                 },
                 {
