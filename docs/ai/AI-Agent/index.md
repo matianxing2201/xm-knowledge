@@ -40,6 +40,8 @@ title: AI Agent
       href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-SDK常用方法
     - name: 自定义模型 Modelfile
       href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-自定义模型Modelfile
+    - name: RAG 实战
+      href: /xm-knowledge/ai/AI-Agent/Ollama/Ollama-RAG实战
 - name: 7种RAG方案
   href: /xm-knowledge/ai/AI-Agent/RAG/index
   open: true

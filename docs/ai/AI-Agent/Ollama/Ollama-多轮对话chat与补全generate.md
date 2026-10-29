@@ -135,11 +135,7 @@ POST http://127.0.0.1:5000/ollama/multi/completion
 
 ## 五、小结
 
-```text
-[x] chat 接收带角色的 messages 列表
-[x] 多轮对话由调用方维护历史，并在每次请求时传入
-[x] chat 的助手回复位于 response.message.content
-[x] generate 接收 prompt，生成文本位于 response.response
-```
-
-> 多轮对话的关键是把需要的历史消息重新传给模型；文本生成则从当前提供的 prompt 开始。
+1. `chat` 接收带角色的 `messages`，适合对话和多轮追问。
+2. 接口不会自动保存历史；调用方要把需要的用户消息和助手回复继续传入。
+3. `chat` 的文本回复位于 `response.message.content`。
+4. `generate` 接收一段 `prompt`，生成文本位于 `response.response`。

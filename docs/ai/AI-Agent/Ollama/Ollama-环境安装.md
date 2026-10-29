@@ -200,15 +200,8 @@ pip install ollama
 
 # 六、小结
 
-到这一步，Ollama 环境就算搭起来了：
-
-```text
-[x] 了解 Ollama 是什么
-[x] 本地安装（Mac / Windows / Linux）
-[x] Docker 部署 Ollama
-[x] 进容器拉取并运行 qwen2.5:7b
-[x] 常用命令 serve / run / pull / list
-[x] 安装 Python SDK
-```
+1. Ollama 可以直接安装在本机，也可以通过 Docker 部署；使用 Docker 时，可用数据卷保留已下载的模型。
+2. 常用命令各有用途：`serve` 启动服务，`run` 运行模型，`pull` 拉取模型，`list` 查看已安装模型。Docker 部署时，在容器中执行这些命令。
+3. Python 项目安装 `ollama` SDK 后，可以连接 Ollama 服务并从代码中调用模型。
 
 下一篇先整理[共用的模型配置与客户端封装](./Ollama-配置与客户端.md)，再进入[基础对话与参数配置](./Ollama-基础对话与参数配置.md)。

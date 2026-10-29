@@ -465,6 +465,10 @@ const config = withMermaid(
                       text: "自定义模型 Modelfile",
                       link: "/ai/AI-Agent/Ollama/Ollama-自定义模型Modelfile",
                     },
+                    {
+                      text: "RAG 实战",
+                      link: "/ai/AI-Agent/Ollama/Ollama-RAG实战",
+                    },
                   ],
                 },
                 {

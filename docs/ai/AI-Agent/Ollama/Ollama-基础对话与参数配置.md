@@ -151,11 +151,7 @@ if options:
 
 ## 六、小结
 
-```text
-[x] 用 messages 描述对话内容和角色
-[x] 普通模式等待完整响应，再读取 message.content
-[x] 流式模式循环迭代响应流，逐段读取 message.content
-[x] 用 options 调整生成方式和输出长度
-```
-
-> `chat` 负责对话，`messages` 描述输入；`stream` 决定响应是一次返回还是分段返回，`options` 控制生成参数。
+1. `messages` 用带角色的消息描述对话输入，多轮对话需要一并传入相关历史。
+2. 普通模式等待模型生成完成，再从 `response.message.content` 读取回复。
+3. 设置 `stream=True` 后，`chat` 返回可迭代的响应流，需要逐段读取内容。
+4. `options` 可调整生成参数；项目可以集中设置默认值，再按请求覆盖。

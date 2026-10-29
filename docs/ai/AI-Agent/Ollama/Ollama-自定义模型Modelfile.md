@@ -134,9 +134,7 @@ return response.response
 
 ## 六、小结
 
-```text
-[x] FROM 指定自定义模型使用的基础模型
-[x] SYSTEM 设置默认行为，PARAMETER 设置默认运行参数
-[x] ollama create -f Modelfile 根据配置创建自定义模型
-[x] ollama run 或 SDK generate 调用创建好的模型
-```
+1. `FROM` 指定基础模型，`SYSTEM` 和 `PARAMETER` 设置自定义模型的默认行为与参数。
+2. `ollama create -f Modelfile` 根据文件中的配置创建新模型。
+3. 创建完成后，可以用 `ollama run` 交互调用，也可以通过 Python SDK 的 `generate()` 生成文本。
+4. 项目封装接口时，可以将 Modelfile 中的配置作为 SDK 参数传入，不必依赖文件路径。
