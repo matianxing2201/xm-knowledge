@@ -15,17 +15,33 @@ function checkArticle(filePath) {
 
   const content = readFileSync(filePath, 'utf-8')
   const lines = content.split('\n')
+  const proseLines = []
+  const unlabeledCodeBlocks = []
+  let insideCodeBlock = false
 
-  // 1. Check H1 unique
-  const h1Lines = lines.filter((line) => /^# [^#]/.test(line.trim()))
+  for (const line of lines) {
+    if (/^```/.test(line.trim())) {
+      if (insideCodeBlock) {
+        insideCodeBlock = false
+      } else {
+        insideCodeBlock = true
+        if (/^```\s*$/.test(line.trim())) unlabeledCodeBlocks.push(line)
+      }
+      continue
+    }
+    if (!insideCodeBlock) proseLines.push(line)
+  }
+
+  // 1. Check H1 unique in prose (ignore headings inside code examples)
+  const h1Lines = proseLines.filter((line) => /^# [^#]/.test(line.trim()))
   if (h1Lines.length === 0) {
     errors.push('Missing H1 heading')
   } else if (h1Lines.length > 1) {
     errors.push(`Multiple H1 headings found (${h1Lines.length})`)
   }
 
-  // 2. Check no H5 or H6
-  const h5h6 = lines.filter((line) => /^#{5,6} /.test(line.trim()))
+  // 2. Check no H5 or H6 headings in prose
+  const h5h6 = proseLines.filter((line) => /^#{5,6} /.test(line.trim()))
   if (h5h6.length > 0) {
     errors.push(`H5/H6 headings found: ${h5h6.length} (max H4 allowed)`)
   }
@@ -52,10 +68,8 @@ function checkArticle(filePath) {
   }
 
   // 4. Check code blocks have language
-  const codeBlockOpens = lines.filter((line) => /^```/.test(line.trim()))
-  const unlabeled = codeBlockOpens.filter((line) => /^```\s*$/.test(line.trim()))
-  if (unlabeled.length > 0) {
-    errors.push(`Code blocks without language: ${unlabeled.length}`)
+  if (unlabeledCodeBlocks.length > 0) {
+    errors.push(`Code blocks without language: ${unlabeledCodeBlocks.length}`)
   }
 
   // 5. Check image paths

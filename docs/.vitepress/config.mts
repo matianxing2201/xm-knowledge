@@ -108,12 +108,28 @@ const config = withMermaid(
             ],
           },
           { text: "Go", link: "/go/" },
+          { text: "Docker", link: "/docker/" },
           { text: "App 开发", link: "/app/" },
           { text: "标签", link: "/tags.html" },
           { text: "归档", link: "/archive.html" },
         ],
 
         sidebar: {
+          "/docker/": [
+            {
+              text: "Docker 学习笔记",
+              items: [
+                {
+                  text: "云服务器与 Docker 环境检查",
+                  link: "/docker/Docker-02-云服务器与环境检查",
+                },
+                {
+                  text: "镜像与容器",
+                  link: "/docker/Docker-03-镜像容器与Nginx",
+                },
+              ],
+            },
+          ],
           "/web/vue/": [
             {
               text: "Vue",
