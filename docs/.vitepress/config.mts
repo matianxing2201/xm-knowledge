@@ -120,12 +120,20 @@ const config = withMermaid(
               text: "Docker 学习笔记",
               items: [
                 {
+                  text: "StarSprout 部署教程（引言）",
+                  link: "/docker/Docker-01-StarSprout部署教程",
+                },
+                {
                   text: "云服务器与 Docker 环境检查",
                   link: "/docker/Docker-02-云服务器与环境检查",
                 },
                 {
                   text: "镜像与容器",
                   link: "/docker/Docker-03-镜像容器与Nginx",
+                },
+                {
+                  text: "数据卷与挂载",
+                  link: "/docker/Docker-04-数据卷与挂载",
                 },
               ],
             },
