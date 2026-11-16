@@ -1,3 +1,0 @@
-xm-knowledge.tianxinglab.cloud {
-    reverse_proxy xm-knowledge:80
-}

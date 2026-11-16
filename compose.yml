@@ -3,20 +3,9 @@ services:
     build: .
     image: xm-knowledge:latest
     restart: unless-stopped
+    networks:
+      - starsprout_default
 
-  caddy:
-    image: caddy:2
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - xm-knowledge
-
-volumes:
-  caddy_data:
-  caddy_config:
+networks:
+  starsprout_default:
+    external: true
