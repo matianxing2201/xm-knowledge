@@ -1,0 +1,28 @@
+# Dependencies and version-control data
+**/node_modules
+**/.git
+
+# Local editor, agent, and tooling state
+**/.agents
+**/.codegraph
+**/.history
+**/.omo
+**/.playwright-mcp
+**/.trae
+**/skills-lock.json
+
+# Operating-system and CI metadata
+**/.DS_Store
+**/.github
+
+# Local-only notes and generated VitePress files
+docs/spec
+docs/superpowers
+docs/.vitepress/cache
+docs/.vitepress/.temp
+docs/.vitepress/dist
+
+# Local environment files may contain secrets
+**/.env
+**/.env.*
+!**/.env.example
