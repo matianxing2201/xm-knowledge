@@ -12,12 +12,12 @@ const config = withMermaid(
       title: "学习笔记",
       description: "个人学习笔记知识库",
       lang: "zh-CN",
-      base: "/xm-knowledge/",
+      base: "/",
       cleanUrls: true,
       srcExclude: ["**/superpowers/**", "**/spec/**"],
 
       sitemap: {
-        hostname: "https://matianxing2201.github.io/xm-knowledge",
+        hostname: "https://xm-knowledge.tianxinglab.cloud",
       },
 
       head: [

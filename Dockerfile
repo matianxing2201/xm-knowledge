@@ -12,6 +12,7 @@ RUN NODE_OPTIONS=--max-old-space-size=1536 pnpm docs:build
 
 FROM nginx:alpine
 
-COPY --from=builder /app/docs/.vitepress/dist/ /usr/share/nginx/html/xm-knowledge/
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/docs/.vitepress/dist/ /usr/share/nginx/html/
 
 EXPOSE 80
