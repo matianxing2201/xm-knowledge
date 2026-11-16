@@ -8,7 +8,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-RUN pnpm docs:build
+RUN NODE_OPTIONS=--max-old-space-size=1536 pnpm docs:build
 
 FROM nginx:alpine
 
