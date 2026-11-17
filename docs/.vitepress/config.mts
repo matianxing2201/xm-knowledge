@@ -108,7 +108,7 @@ const config = withMermaid(
             ],
           },
           { text: "Go", link: "/go/" },
-          { text: "Docker", link: "/docker/" },
+          { text: "Docker", link: "/docker/Docker-02-云服务器与环境检查" },
           { text: "App 开发", link: "/app/" },
           { text: "标签", link: "/tags.html" },
           { text: "归档", link: "/archive.html" },
@@ -117,29 +117,24 @@ const config = withMermaid(
         sidebar: {
           "/docker/": [
             {
-              text: "Docker 学习笔记",
-              items: [
-                {
-                  text: "StarSprout 部署教程（引言）",
-                  link: "/docker/Docker-01-StarSprout部署教程",
-                },
-                {
-                  text: "云服务器与 Docker 环境检查",
-                  link: "/docker/Docker-02-云服务器与环境检查",
-                },
-                {
-                  text: "镜像与容器",
-                  link: "/docker/Docker-03-镜像容器与Nginx",
-                },
-                {
-                  text: "数据卷与挂载",
-                  link: "/docker/Docker-04-数据卷与挂载",
-                },
-                {
-                  text: "Dockerfile 与 Compose 部署项目",
-                  link: "/docker/Docker-05-Dockerfile与Compose部署",
-                },
-              ],
+              text: "云服务器与 Docker 环境检查",
+              link: "/docker/Docker-02-云服务器与环境检查",
+            },
+            {
+              text: "镜像与容器",
+              link: "/docker/Docker-03-镜像容器与Nginx",
+            },
+            {
+              text: "数据卷与挂载",
+              link: "/docker/Docker-04-数据卷与挂载",
+            },
+            {
+              text: "Dockerfile 与 Compose 部署项目",
+              link: "/docker/Docker-05-Dockerfile与Compose部署",
+            },
+            {
+              text: "域名、反向代理与 HTTPS",
+              link: "/docker/Docker-06-域名反向代理与HTTPS",
             },
           ],
           "/web/vue/": [

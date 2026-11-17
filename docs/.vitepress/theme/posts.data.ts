@@ -6,7 +6,7 @@ export interface Post {
   lastUpdated: string
   tags: string[]
   url: string
-  category: 'AI' | 'Java' | 'Go' | 'Web'
+  category: 'AI' | 'Java' | 'Go' | 'Web' | 'Docker'
   words: number
   readingTime: number
   excerpt: string
@@ -17,6 +17,7 @@ const CATEGORY_MAP: Record<string, Post['category']> = {
   java: 'Java',
   go: 'Go',
   web: 'Web',
+  docker: 'Docker',
 }
 
 function stripFrontmatter(src: string): string {
