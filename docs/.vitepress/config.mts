@@ -135,6 +135,10 @@ const config = withMermaid(
                   text: "数据卷与挂载",
                   link: "/docker/Docker-04-数据卷与挂载",
                 },
+                {
+                  text: "Dockerfile 与 Compose 部署项目",
+                  link: "/docker/Docker-05-Dockerfile与Compose部署",
+                },
               ],
             },
           ],
