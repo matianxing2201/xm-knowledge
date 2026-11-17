@@ -3,9 +3,5 @@ services:
     build: .
     image: xm-knowledge:latest
     restart: unless-stopped
-    networks:
-      - starsprout_default
-
-networks:
-  starsprout_default:
-    external: true
+    ports:
+      - "127.0.0.1:8081:80"  # 绑定服务器本机的 8081，并转发到容器的 80 端口
